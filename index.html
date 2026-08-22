@@ -50,6 +50,7 @@
   .brand{
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:10px;
   }
   .brand-logo{
@@ -106,6 +107,7 @@
   .today{
     font-size:14px;
     color: var(--ink-soft);
+    margin-bottom:4px;
   }
 
   .topbar-right{
@@ -697,7 +699,9 @@
     outline:none;
   }
   .duft-form input[type="text"]:focus, .duft-form select:focus{ border-color: var(--coco); }
-  .duft-form-actions{ display:flex; gap:10px; justify-content:flex-end; }
+  .duft-form-actions{ display:flex; gap:10px; justify-content:flex-end; align-items:center; }
+  .duft-form-actions.with-delete{ justify-content:space-between; }
+  .duft-form-actions-right{ display:flex; gap:10px; }
 
   .pct-input-wrap{
     display:flex;
@@ -790,6 +794,17 @@
     font-weight:600;
     cursor:pointer;
   }
+  .btn-danger{
+    background:transparent;
+    border:1px solid var(--warn);
+    color: var(--warn);
+    border-radius:10px;
+    padding:9px 16px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .btn-danger:hover{ background: var(--warn); color:#fff; }
 
   /* ---------- Vorrat (editierbar) ---------- */
   .vorrat-grid{
@@ -904,11 +919,10 @@
     <div id="view-dashboard" class="view active">
     <div class="topbar">
       <div>
-        <div class="eyebrow">Übersicht</div>
-        <h1>Guten Tag 🕯️</h1>
+        <div class="today" id="todayDate"></div>
+        <h1 id="greetingText">Guten Tag</h1>
       </div>
       <div class="topbar-right">
-        <div class="today" id="todayDate"></div>
         <div class="autosave-indicator" id="autoSaveIndicator">Gespeichert</div>
         <div class="data-actions">
           <button class="btn-secondary" id="importDataBtn">Backup importieren</button>
@@ -1239,6 +1253,18 @@
   document.getElementById('todayDate').textContent =
     new Date().toLocaleDateString('de-DE', { weekday:'long', day:'2-digit', month:'long', year:'numeric' });
 
+  // greeting based on time of day
+  (function(){
+    const hour = new Date().getHours();
+    let greeting = 'Guten Tag';
+    if (hour < 5) greeting = 'Gute Nacht';
+    else if (hour < 11) greeting = 'Guten Morgen';
+    else if (hour < 17) greeting = 'Guten Tag';
+    else if (hour < 22) greeting = 'Guten Abend';
+    else greeting = 'Gute Nacht';
+    document.getElementById('greetingText').textContent = greeting;
+  })();
+
   // calculator logic
   const qty150Input = document.getElementById('qty150');
   const qty70Input = document.getElementById('qty70');
@@ -1447,6 +1473,27 @@
   // ---- Duft detail modal ----
   let activeModal = null;
 
+  // Wandelt eine gespeicherte data:-URL in eine echte Blob-URL um.
+  // Safari blockiert das direkte Öffnen von data:-URLs in einem neuen Tab —
+  // Blob-URLs funktionieren dagegen zuverlässig.
+  function dataUrlToBlobUrl(dataUrl){
+    try {
+      const [header, base64] = dataUrl.split(',');
+      const mimeMatch = header.match(/data:(.*?);base64/);
+      const mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
+      const binary = atob(base64);
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: mime });
+      return URL.createObjectURL(blob);
+    } catch (err) {
+      console.error('PDF konnte nicht vorbereitet werden:', err);
+      return dataUrl;
+    }
+  }
+
+
   function closeDuftModal(){
     if (activeModal){
       activeModal.remove();
@@ -1522,7 +1569,7 @@
         <div class="modal-detail-label">Dokumente</div>
         <div class="modal-pdf-list">
           ${d.pdfs.map(p => `
-            <a class="modal-pdf-link" href="${p.dataUrl}" target="_blank" rel="noopener" download="${p.name}">
+            <a class="modal-pdf-link" href="${dataUrlToBlobUrl(p.dataUrl)}" target="_blank" rel="noopener" download="${p.name}">
               <span class="modal-pdf-icon">📄</span>
               <span>${p.name}</span>
             </a>
@@ -1598,9 +1645,12 @@
             <div class="pdf-file-preview" id="editPdfPreview"></div>
           </div>
         </div>
-        <div class="duft-form-actions">
-          <button class="btn-secondary" id="editCancelBtn">Abbrechen</button>
-          <button class="btn-primary" id="editSaveBtn">Speichern</button>
+        <div class="duft-form-actions with-delete">
+          <button class="btn-danger" id="editDeleteBtn">Löschen</button>
+          <div class="duft-form-actions-right">
+            <button class="btn-secondary" id="editCancelBtn">Abbrechen</button>
+            <button class="btn-primary" id="editSaveBtn">Speichern</button>
+          </div>
         </div>
       </div>
     `;
@@ -1683,6 +1733,15 @@
 
     modal.querySelector('#editCancelBtn').addEventListener('click', () => {
       renderModalView(modal, index);
+    });
+
+    modal.querySelector('#editDeleteBtn').addEventListener('click', () => {
+      const confirmed = confirm(`„${d.name}" wirklich löschen? Das kann nicht rückgängig gemacht werden.`);
+      if (!confirmed) return;
+      duefte.splice(index, 1);
+      renderDuefte();
+      scheduleAutoSave();
+      closeDuftModal();
     });
 
     modal.querySelector('#editSaveBtn').addEventListener('click', async () => {
