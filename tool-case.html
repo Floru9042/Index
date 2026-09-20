@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tool Case</title>
+<style>
+  :root{
+    --cream: #C6CAB9;
+    --cream-dim: #CED2C1;
+    --ink: #000000;
+    --ink-soft: #000000;
+    --steel: #3E6275;
+    --steel-soft: #AFC3CE;
+    --sand: #9C7B3C;
+    --sand-soft: #DCC79A;
+    --line: #B3B8A4;
+    --card: #DDE0D3;
+    --warn: #A83824;
+    --warn-soft: #EBD6CF;
+    --ok: #2F6B3D;
+  --ok-soft: #B9D5B6;
+  --ok-line: #86AF83;
+  --orange: #9A5A12;
+  --orange-soft: #E8CFA2;
+  --orange-line: #C2A05F;
+  --sidebar: #000000;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height:100vh;
+  }
+
+  .layout{ display:flex; flex-direction:column; min-height:100vh; }
+
+  /* ---------- Header ---------- */
+  .app-header{
+    background: var(--sidebar);
+    padding: 16px clamp(16px, 4vw, 28px);
+    position: sticky;
+    top:0;
+    z-index: 20;
+  }
+  .brand{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .brand-mark{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:-0.01em;
+  }
+  .brand-sub{ font-size:12px; color:#FFFFFF; }
+
+  main{ padding: clamp(20px, 4vw, 44px); max-width:1400px; }
+
+  /* ---------- Ansichten ---------- */
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:13px; font-weight:600; color: var(--ink-soft);
+    cursor:pointer; margin-bottom:18px; padding:6px 4px;
+    background:none; border:none;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .back-link:hover{ color: var(--ink); }
+  .back-link svg{ flex-shrink:0; }
+
+  /* ---------- Kacheln ---------- */
+  .quick-links{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap:16px;
+    margin-bottom:26px;
+  }
+  .quick-link-card{
+    display:flex; align-items:center; gap:14px;
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+    cursor:pointer; text-align:left; width:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .quick-link-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -14px rgba(30,36,39,0.32);
+  }
+  .quick-link-icon{
+    flex-shrink:0; width:40px; height:40px; border-radius:10px;
+    background: var(--cream-dim);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .quick-link-title{ font-family: Arial, Helvetica, sans-serif; font-weight:700; font-size:15px; }
+  .quick-link-sub{ font-size:12.5px; color: var(--ink-soft); margin-top:2px; }
+
+  .empty-state{
+    background: var(--cream-dim);
+    border-radius:14px;
+    padding:22px 24px;
+    font-size:14px;
+    color: var(--ink-soft);
+    line-height:1.6;
+  }
+
+  .topbar{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    flex-wrap:wrap; gap:16px; margin-bottom:30px;
+  }
+  .eyebrow{
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:#000000; font-weight:600; margin-bottom:8px;
+  }
+  h1{
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight:700; font-size: clamp(26px, 3.4vw, 36px);
+    margin:0; letter-spacing:-0.02em;
+  }
+  .today{ font-size:14px; color: var(--ink-soft); }
+  .gruss{ font-size:15px; color: var(--ink-soft); margin-top:8px; }
+  .topbar-right{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+  .data-actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
+  .card-actions{
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    margin-top:24px; padding-top:20px;
+    border-top:1px solid var(--line);
+  }
+  @media (max-width:640px){
+    .card-actions{ flex-wrap:nowrap; }
+    .card-actions button{ flex:1 1 0; min-width:0; padding-top:13px; padding-bottom:13px; }
+  }
+
+  .card{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding: clamp(20px, 3vw, 30px);
+    box-shadow: 0 1px 2px rgba(30,36,39,0.04), 0 12px 30px -18px rgba(30,36,39,0.18);
+    margin-bottom:20px;
+  }
+  .card-title{ font-family: Arial, Helvetica, sans-serif; font-size:20px; font-weight:700; margin:0 0 4px; letter-spacing:-0.01em; }
+  .card-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 22px; }
+
+  /* ---------- Eingaben ---------- */
+  .mode-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; margin-bottom:16px; flex-wrap:wrap;
+  }
+  .mode-label{ display:flex; align-items:center; gap:12px; }
+  input[type="radio"]{ accent-color: var(--steel); width:17px; height:17px; margin:0; flex-shrink:0; }
+  label{ font-weight:600; font-size:14px; }
+
+  .masse-inputs{ display:flex; gap:10px; margin-bottom:16px; }
+  .masse-inputs > div{ flex:1 1 0; min-width:0; }
+  .masse-inputs .sub-label{
+    display:block; font-size:11px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;
+  }
+
+  input[type="number"]{
+    width:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:24px; font-weight:700; color:var(--ink);
+    background: var(--cream-dim);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    outline:none;
+  }
+  input[type="number"]:focus{ border-color: var(--steel); background:#EFF1E8; }
+  input[type="number"]::placeholder{ color:#6E7566; font-weight:400; opacity:1; }
+  input[type="number"].qty-input-small{
+    width:96px; flex-shrink:0; text-align:center;
+    font-size:20px; border-radius:12px; padding:10px 8px;
+  }
+  input[type="number"]:disabled{ opacity:.45; }
+  .mode-row.off .mode-label label,
+  .mode-row.off .sub-label{ opacity:.55; }
+
+  .volume-hint{
+    background: var(--cream-dim);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px; font-weight:600; color: var(--ink-soft);
+    margin-bottom:22px;
+  }
+  .volume-hint.warn{ background: var(--warn-soft); color:#000000; }
+
+  .field{ margin-bottom:0; }
+  .field-row{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:8px; gap:12px;
+  }
+  .field-hint{ font-size:12px; color:var(--ink-soft); }
+  .value-pill{
+    font-family: Arial, Helvetica, sans-serif; font-weight:700; font-size:18px;
+    color:#000000; white-space:nowrap;
+  }
+
+  hr.divider{ border:none; border-top:1px dashed var(--line); margin:24px 0; }
+
+  /* ---------- Tabelle ---------- */
+  .table-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  th{
+    text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+    color:var(--ink-soft); font-weight:600; padding:8px 6px; border-bottom:1px solid var(--line);
+  }
+  th.num, td.num{ text-align:right; }
+  td{ padding:14px 6px; border-bottom:1px solid var(--cream-dim); vertical-align:middle; }
+  tr:last-child td{ border-bottom:none; }
+  td.mittel{ min-width:190px; font-weight:600; }
+  td.wirkstoff{ width:120px; }
+  td.wirkstoff input[type="number"]{
+    font-size:17px; padding:9px 10px; border-radius:10px; text-align:right;
+  }
+  .out-value{ font-family: Arial, Helvetica, sans-serif; font-size:22px; font-weight:700; white-space:nowrap; letter-spacing:-0.01em; }
+  .out-unit{ font-family: Arial, Helvetica, sans-serif; font-size:12px; font-weight:400; color:var(--ink-soft); margin-left:3px; }
+  td.budget{ min-width:180px; }
+  .bar-track{ height:10px; border-radius:6px; background: var(--cream-dim); overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:6px; background: var(--steel); }
+  .bar-fill.warn{ background: var(--warn); }
+  .bar-note{ font-size:11px; color: var(--ink-soft); margin-top:6px; }
+  .bar-note.warn{ color:#000000; font-weight:600; }
+
+  .results.stale .table-scroll{ opacity:.35; }
+  .stale-banner{
+    display:none;
+    background: var(--cream-dim);
+    border-radius:10px; padding:12px 14px;
+    font-size:13px; font-weight:600; color:#000000;
+    margin-bottom:18px;
+  }
+  .results.stale .stale-banner{ display:block; }
+
+  /* Auf schmalen Schirmen wird jede Zeile zu einer Karte — kein Querscrollen */
+  @media (max-width:640px){
+    .table-scroll{ overflow-x:visible; }
+    table, tbody{ display:block; width:100%; }
+    thead{ display:none; }
+
+    tbody tr{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap:14px; row-gap:12px;
+      padding:16px 0;
+      border-bottom:1px solid var(--line);
+    }
+    tbody tr:last-child{ border-bottom:none; padding-bottom:0; }
+
+    tbody td{
+      display:block; padding:0; border:none; text-align:left; min-width:0; width:auto;
+    }
+    tbody td::before{
+      content: attr(data-label);
+      display:block;
+      font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+      font-weight:600; color:var(--ink-soft); margin-bottom:5px;
+    }
+    tbody td.mittel::before{ content:none; }
+
+    td.mittel   { grid-column:1 / -1; grid-row:1; font-size:15px; line-height:1.35; }
+    td.wirkstoff{ grid-column:1 / -1; grid-row:2; }
+    td.out-wait { grid-column:1; grid-row:3; }
+    td.out-max  { grid-column:2; grid-row:3; }
+    td.budget   { grid-column:1 / -1; grid-row:4; }
+
+    td.wirkstoff input[type="number"]{ width:100%; text-align:left; }
+    .out-value{ font-size:20px; }
+    .bar-note{ margin-top:7px; font-size:12px; }
+  }
+
+  /* ---------- Einsatzuhr ---------- */
+  .timer-picker{ margin-bottom:16px; }
+  .timer-picker-label{
+    font-size:11px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; font-weight:600;
+  }
+  .mittel-choice{ display:flex; flex-direction:column; gap:8px; }
+  .choice-row{ display:flex; gap:8px; align-items:stretch; }
+  .choice-count{
+    flex:0 0 auto; min-width:52px; padding:0 10px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); border-radius:12px;
+    background: var(--cream-dim); color:#000000;
+    font-family: Arial, Helvetica, sans-serif; font-size:14px; font-weight:700;
+  }
+  .choice-count.aktiv{ background:#171B12; border-color:#171B12; color:#FFFFFF; }
+  .choice-plus{
+    flex:0 0 auto; width:50px;
+    border:1px solid #767D64; border-radius:12px;
+    background:#969D84; color:#000000;
+    font-family: Arial, Helvetica, sans-serif; font-size:20px; font-weight:700;
+    line-height:1; cursor:pointer;
+  }
+  .choice-plus:hover:enabled{ background:#878E70; }
+  .choice-plus:disabled{ opacity:.4; cursor:default; }
+  .choice-btn{
+    flex:1 1 auto; min-width:0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:13px; font-weight:700; text-align:left;
+    padding:11px 15px; border-radius:12px;
+    border:1px solid var(--line); background: var(--cream-dim); color:#000000;
+    cursor:pointer;
+  }
+  .choice-btn:hover{ background:#C2C7B4; }
+  .choice-btn[aria-pressed="true"]{ background:#171B12; border-color:#171B12; color:#FFFFFF; }
+  .choice-btn:disabled{ opacity:.45; cursor:default; }
+  .choice-btn:disabled:hover{ background: var(--cream-dim); }
+  .choice-btn[aria-pressed="true"]:disabled:hover{ background:#171B12; }
+  .timer-buttons{ display:flex; gap:10px; margin-bottom:20px; }
+  @media (max-width:640px){
+    .timer-buttons{ width:100%; }
+    .timer-buttons button{ flex:1 1 0; min-width:0; padding-top:13px; padding-bottom:13px; }
+  }
+
+  .einsatz-summary{
+    display:flex; align-items:baseline; gap:18px; flex-wrap:wrap;
+    background: var(--cream-dim); border:1px solid var(--line);
+    border-radius:14px; padding:14px 18px; margin-bottom:14px;
+  }
+  .einsatz-count{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:30px; font-weight:700; line-height:1; letter-spacing:-0.02em;
+  }
+  .einsatz-detail{ font-size:13px; color:var(--ink-soft); font-weight:600; }
+
+  .timer-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
+  @media (max-width:860px){ .timer-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .timer-grid{ grid-template-columns:1fr; } }
+  .timer-box{
+    background: var(--cream-dim);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:18px 20px;
+  }
+  .timer-box.ok{ background: var(--ok-soft); border-color: var(--ok-line); }
+  .timer-box.over{ background: var(--orange-soft); border-color: var(--orange-line); }
+  .timer-box.crit{ background: var(--warn-soft); border-color:#C29284; }
+  .timer-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
+    font-weight:600; color:var(--ink-soft); margin-bottom:8px;
+  }
+  .timer-value{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(34px, 8vw, 46px); font-weight:700;
+    letter-spacing:-0.02em; line-height:1;
+  }
+  .timer-state{ font-size:12px; font-weight:600; margin-top:8px; min-height:1.2em; }
+  .timer-hint{
+    background: var(--cream-dim); border-radius:10px;
+    padding:11px 14px; font-size:13px; font-weight:600;
+    margin-top:16px;
+  }
+  .timer-hint.warn{ background: var(--warn-soft); }
+
+  /* ---------- Popup ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:100;
+    background: rgba(24,28,20,0.5);
+    display:none; align-items:center; justify-content:center;
+    padding:24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-card{
+    background: var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding: clamp(24px, 4vw, 34px);
+    max-width:460px; width:100%;
+    position:relative;
+    max-height:90vh; overflow-y:auto;
+    box-shadow: 0 30px 60px -20px rgba(20,24,18,0.45);
+  }
+  .modal-close{
+    position:absolute; top:18px; right:18px;
+    width:32px; height:32px; border-radius:50%;
+    border:1px solid var(--line); background: var(--cream-dim);
+    color:#000000; font-size:16px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{ background: var(--line); }
+  .modal-field{ margin-bottom:16px; }
+  .modal-field label{ display:block; font-size:12px; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:7px; }
+  .modal-field input{
+    width:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:18px; font-weight:700; color:var(--ink);
+    background: var(--cream-dim);
+    border:1px solid var(--line); border-radius:12px;
+    padding:11px 14px; outline:none;
+  }
+  .modal-field input:focus{ border-color: var(--steel); background:#EFF1E8; }
+  .modal-field input::placeholder{ color:#6E7566; font-weight:400; opacity:1; }
+  .modal-error{
+    display:none; background: var(--warn-soft); color:#000000;
+    border-radius:10px; padding:10px 13px; font-size:13px; font-weight:600;
+    margin-bottom:16px;
+  }
+  .modal-error.show{ display:block; }
+  .modal-actions{ display:flex; gap:10px; margin-top:22px; }
+  .modal-actions button{ flex:1 1 0; }
+
+  .row-remove{
+    margin-left:8px; padding:2px 7px;
+    border:1px solid var(--line); border-radius:6px;
+    background: var(--cream-dim); color:#000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:12px; line-height:1.4; cursor:pointer; font-weight:700;
+  }
+  .row-remove:hover{ background: var(--warn-soft); }
+
+  /* ---------- Grundsätze ---------- */
+  .rule-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; padding:14px 0; border-bottom:1px solid var(--cream-dim);
+    flex-wrap:wrap;
+  }
+  .rule-row:last-child{ border-bottom:none; }
+  .rule-text{ font-size:14px; font-weight:600; }
+  .rule-state{ font-size:12px; color:var(--ink-soft); margin-top:2px; }
+  .tag{
+    display:inline-block; font-size:11px; padding:4px 11px; border-radius:20px;
+    background: var(--steel-soft); color:#000000; font-weight:600; white-space:nowrap;
+  }
+  .tag.warn{ background: var(--warn-soft); color:#000000; }
+  .tag.open{ background: var(--cream-dim); border:1px solid var(--line); color:#000000; }
+
+  /* ---------- Buttons ---------- */
+  .add-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:#171B12; color:#fff; border:none; border-radius:12px;
+    padding:11px 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px; font-weight:600; cursor:pointer;
+    transition: background .15s ease, transform .1s ease;
+  }
+  .add-btn:hover{ background:#272D1E; }
+  .add-btn:active{ transform: scale(0.98); }
+  .btn-secondary{
+    background:#969D84; border:1px solid #767D64; color:#000000;
+    border-radius:10px; padding:9px 16px; font-size:13px; font-weight:600; cursor:pointer;
+    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  .btn-secondary:hover{ background:#878E70; }
+  .data-actions .btn-secondary,
+  .data-actions .add-btn{ padding:9px 16px; font-size:13px; }
+  button:focus-visible, input:focus-visible{ outline:2px solid var(--steel); outline-offset:2px; }
+
+  .footnote{ font-size:12px; color:var(--ink-soft); margin: 4px 0 0; line-height:1.6; }
+
+  @media print{
+    .app-header{ position:static; }
+    .data-actions, .card-actions, .stale-banner{ display:none !important; }
+    .results.stale .table-scroll{ opacity:1; }
+    .card{ box-shadow:none; break-inside:avoid; }
+  }
+  @media (prefers-reduced-motion:reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">Tool Case</span>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ Startseite ============ -->
+    <div id="view-start" class="view active">
+      <div class="topbar">
+        <div>
+          <h1>Übersicht</h1>
+          <div class="gruss" id="gruss"></div>
+        </div>
+        <div class="topbar-right">
+          <div class="today" id="todayDate"></div>
+        </div>
+      </div>
+
+      <div class="quick-links">
+        <button class="quick-link-card" data-goto="reizstoff">
+          <div class="quick-link-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="8" y="7" width="8" height="14" rx="2"/>
+              <path d="M10 7V5h4v2"/>
+              <path d="M12 5V3"/>
+              <path d="M18 9l3-1.5"/>
+              <path d="M18 12h3"/>
+              <path d="M6 9L3 7.5"/>
+              <path d="M6 12H3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="quick-link-title">Reizstoff</div>
+            <div class="quick-link-sub">Wartezeit &amp; Einsatzzeit berechnen</div>
+          </div>
+        </button>
+
+        <button class="quick-link-card" data-goto="msd">
+          <div class="quick-link-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3l8 3.5v5c0 4.6-3.2 8.5-8 9.5-4.8-1-8-4.9-8-9.5v-5L12 3z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="quick-link-title">MSD</div>
+            <div class="quick-link-sub">Noch nicht eingerichtet</div>
+          </div>
+        </button>
+      </div>
+    </div><!-- /view-start -->
+
+    <!-- ============ Reizstoff ============ -->
+    <div id="view-reizstoff" class="view">
+      <button class="back-link" data-goto="start">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Übersicht
+      </button>
+
+    <div class="topbar">
+      <div>
+        <div class="eyebrow">Reizstoffrechner</div>
+        <h1>Einsatzzeiten berechnen</h1>
+      </div>
+      <div class="topbar-right">
+        <div class="today" id="todayDate2"></div>
+      </div>
+    </div>
+
+
+      <!-- Einsatzuhr -->
+      <div class="card">
+        <div class="card-title">Einsatzuhr</div>
+        <p class="card-sub">Beim Einsatz eines Reizstoffmittels starten. Die Wartezeit richtet sich nach dem gewählten Einsatzmittel und dem erfassten Raumvolumen.</p>
+
+        <div class="timer-picker">
+          <div class="timer-picker-label" id="mittelChoiceLabel">Einsatzmittel wählen, mit + weitere einsetzen</div>
+          <div class="mittel-choice" id="mittelChoice" role="group" aria-labelledby="mittelChoiceLabel"></div>
+        </div>
+
+        <div class="timer-buttons">
+          <button class="btn-secondary" id="timerReset">Zurücksetzen</button>
+          <button class="add-btn" id="timerStart">Einsatz starten</button>
+        </div>
+
+        <div class="einsatz-summary">
+          <div>
+            <div class="timer-label">Eingesetzte Einsatzmittel</div>
+            <div class="einsatz-count" id="einsatzCount">0</div>
+          </div>
+          <div class="einsatz-detail" id="einsatzDetail">Noch kein Einsatz</div>
+        </div>
+
+        <div class="timer-grid">
+          <div class="timer-box" id="boxWait">
+            <div class="timer-label">Wartezeit bis Wirkung</div>
+            <div class="timer-value" id="timerWaitValue">–</div>
+            <div class="timer-state" id="timerWaitState"></div>
+          </div>
+          <div class="timer-box" id="boxMax">
+            <div class="timer-label">Max. Einsatzzeit (Regel)</div>
+            <div class="timer-value" id="timerMaxValue">6:00</div>
+            <div class="timer-state" id="timerMaxState"></div>
+          </div>
+          <div class="timer-box" id="boxEff">
+            <div class="timer-label">Max. Einsatzzeit (effektiv)</div>
+            <div class="timer-value" id="timerEffValue">–</div>
+            <div class="timer-state" id="timerEffState"></div>
+          </div>
+        </div>
+
+        <div class="timer-hint" id="timerHint">Raumvolumen erfassen, dann lässt sich der Einsatz starten.</div>
+      </div>
+
+      <!-- Eingaben -->
+      <div class="card">
+        <div class="card-title">Raum eingeben</div>
+        <p class="card-sub">Entweder die Raummasse oder das Volumen direkt erfassen. Die gewählte Zeile wird gerechnet.</p>
+
+        <div class="mode-row" id="rowMasse">
+          <div class="mode-label">
+            <input type="radio" name="modus" id="modusMasse" value="masse" checked>
+            <label for="modusMasse">Raummasse in m</label>
+          </div>
+        </div>
+        <div class="masse-inputs">
+          <div>
+            <span class="sub-label">Länge</span>
+            <input type="number" id="laenge" min="0" step="0.1" placeholder="5.0" inputmode="decimal">
+          </div>
+          <div>
+            <span class="sub-label">Breite</span>
+            <input type="number" id="breite" min="0" step="0.1" placeholder="4.0" inputmode="decimal">
+          </div>
+          <div>
+            <span class="sub-label">Höhe</span>
+            <input type="number" id="hoehe" min="0" step="0.1" placeholder="2.5" inputmode="decimal">
+          </div>
+        </div>
+        <div class="field-hint" style="margin-top:-8px; margin-bottom:16px;">Dezimalstellen mit Punkt eingeben.</div>
+
+        <hr class="divider">
+
+        <div class="mode-row off" id="rowDirekt">
+          <div class="mode-label">
+            <input type="radio" name="modus" id="modusDirekt" value="direkt">
+            <label for="modusDirekt">Direkteingabe in m³</label>
+          </div>
+          <input type="number" id="direkt" class="qty-input-small" min="0" step="0.1" placeholder="40.0" inputmode="decimal" disabled>
+        </div>
+
+        <div class="volume-hint" id="volumeHint">Raumvolumen: 21.6 m³</div>
+
+        <div class="field">
+          <div class="field-row">
+            <label for="anzahl">Anzahl Einsatzmittel</label>
+            <span class="value-pill" id="anzahlPill">1</span>
+          </div>
+          <input type="number" id="anzahl" min="1" step="1" value="1" inputmode="numeric">
+          <div class="field-hint" style="margin-top:8px;">Grundsatz: max. 1 Einsatzmittel pro Raum.</div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-secondary" id="btnReset">Zurücksetzen</button>
+          <button class="add-btn" id="btnCalc">Berechnen</button>
+        </div>
+      </div>
+
+
+    <!-- Einsatzmittel -->
+    <div class="card results" id="mittelCard">
+      <div class="card-title">Einsatzmittel</div>
+      <p class="card-sub">Wartezeit bis ICT 50, max. Einsatz bis 10 % LCT 50. Wirkstoffmenge pro Einsatzmittel ist überschreibbar.</p>
+
+      <div class="stale-banner">Eingaben geändert — auf «Berechnen» klicken.</div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Einsatzmittel</th>
+              <th class="num">Wirkstoff (g)</th>
+              <th class="num">Wartezeit</th>
+              <th class="num">Max. Einsatz (effektiv)</th>
+              <th>6-Minuten-Budget</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <p class="footnote">
+        Wartezeit = 40 · V · 60 / (g · n · 1000) in Sekunden. Max. Einsatz = 2500 · V / (g · n · 1000) in Minuten.
+        V = Raumvolumen in m³, g = Wirkstoff pro Einsatzmittel in Gramm, n = Anzahl Einsatzmittel.
+      </p>
+
+      <div class="card-actions">
+        <button class="add-btn" id="btnAddMittel">Einsatzmittel erfassen</button>
+      </div>
+    </div>
+
+    <!-- Grundsätze -->
+    <div class="card">
+      <div class="card-title">Grundsatz Allgemein</div>
+      <p class="card-sub">Prüfung gegen die aktuell erfassten Werte.</p>
+      <div id="rules"></div>
+    </div>
+
+    </div><!-- /view-reizstoff -->
+
+    <!-- ============ MSD ============ -->
+    <div id="view-msd" class="view">
+      <button class="back-link" data-goto="start">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Übersicht
+      </button>
+
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">MSD</div>
+          <h1>Noch nicht eingerichtet</h1>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Platzhalter</div>
+        <p class="card-sub">Diese Ansicht ist vorbereitet, aber noch ohne Inhalt.</p>
+        <div class="empty-state">
+          Sobald klar ist, was hier gerechnet oder verwaltet werden soll, kommt der Inhalt
+          im gleichen Aufbau wie bei „Reizstoff“ hinein: Eingabekarte links, Auswertung rechts,
+          darunter die Tabelle und die Prüfung der Grundsätze.
+        </div>
+      </div>
+    </div><!-- /view-msd -->
+
+  </main>
+</div>
+
+<div class="modal-overlay" id="mittelModal" role="dialog" aria-modal="true" aria-labelledby="mittelModalTitel">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose" aria-label="Schliessen">&times;</button>
+    <div class="card-title" id="mittelModalTitel">Einsatzmittel erfassen</div>
+    <p class="card-sub">Bezeichnung und Wirkstoffmenge pro Stück.</p>
+
+    <div class="modal-error" id="modalError"></div>
+
+    <div class="modal-field">
+      <label for="neuName">Bezeichnung</label>
+      <input type="text" id="neuName" placeholder="OC mittel" autocomplete="off">
+    </div>
+
+    <div class="modal-field">
+      <label for="neuWirkstoff">Wirkstoff in Gramm</label>
+      <input type="number" id="neuWirkstoff" min="0.1" step="0.1" placeholder="6.0" inputmode="decimal">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Abbrechen</button>
+      <button class="add-btn" id="modalSave">Hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STANDARD = [
+    { name:"OC lang", g:2 },
+    { name:"OC kurz", g:6 }
+  ];
+  var SPEICHER = "konsole-mittel-liste";
+
+  function ladeMittel(){
+    try {
+      var roh = window.localStorage.getItem(SPEICHER);
+      if (!roh) return STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
+      var liste = JSON.parse(roh);
+      if (!Array.isArray(liste)) throw 0;
+      var ALT = {
+        "Reizstoff Patrone Kal. 12, CS / OC lang": "OC lang",
+        "Reizstoff Patrone Kal. 12, CS / OC kurz": "OC kurz"
+      };
+      var sauber = [];
+      liste.forEach(function(m){
+        if (m && ALT[m.name]) m.name = ALT[m.name];
+        if (m && typeof m.name === "string" && m.name.trim() && isFinite(m.g) && m.g > 0){
+          sauber.push({ name: String(m.name).slice(0, 80), g: Number(m.g) });
+        }
+      });
+      return sauber.length ? sauber : STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
+    } catch (e){
+      return STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
+    }
+  }
+
+  function speichereMittel(){
+    try { window.localStorage.setItem(SPEICHER, JSON.stringify(MITTEL)); } catch (e){ /* ohne Speicher weiterarbeiten */ }
+  }
+
+  var MITTEL = ladeMittel();
+
+  var ICT50   = 40;    // mg·min/m³
+  var LCT10   = 2500;  // mg·min/m³, entspricht 10 % LCT 50
+  var MAX_MIN = 6;     // Grundsatz: max. 6 Minuten Einsatzzeit
+  var MIN_M3  = 40;    // Grundsatz: Raumgrösse min. 40 m³
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  function fmt(n, dec){
+    if (!isFinite(n)) return "–";
+    var p = n.toFixed(dec).split(".");
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, "\u2019");
+    return p.join(".");
+  }
+
+  function isDirekt(){ return $("modusDirekt").checked; }
+
+  function volume(){
+    if (isDirekt()) return parseFloat($("direkt").value) || 0;
+    var l = parseFloat($("laenge").value) || 0;
+    var b = parseFloat($("breite").value) || 0;
+    var h = parseFloat($("hoehe").value)  || 0;
+    return l * b * h;
+  }
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  // Vom Benutzer geänderte Wirkstoffmengen übernehmen, bevor die Tabelle neu gebaut wird
+  function uebernehmeWirkstoff(){
+    MITTEL.forEach(function(m, i){
+      var f = $("g" + i);
+      if (f){
+        var w = parseFloat(f.value);
+        if (isFinite(w) && w > 0) m.g = w;
+      }
+    });
+  }
+
+  function buildRows(){
+    var tb = $("tbody");
+    tb.innerHTML = "";
+    MITTEL.forEach(function(m, i){
+      var tr = document.createElement("tr");
+      tr.innerHTML =
+        '<td class="mittel">' + esc(m.name) +
+          '<button type="button" class="row-remove" data-remove="' + i + '" aria-label="' + esc(m.name) + ' entfernen">&times;</button></td>' +
+        '<td class="wirkstoff" data-label="Wirkstoff (g)"><input type="number" id="g' + i + '" min="0" step="0.1" value="' + m.g +
+          '" inputmode="decimal" aria-label="Wirkstoff ' + esc(m.name) + '"></td>' +
+        '<td class="num out-wait" data-label="Wartezeit" id="wait' + i + '"><span class="out-value">–</span></td>' +
+        '<td class="num out-max" data-label="Max. Einsatz (effektiv)" id="max' + i + '"><span class="out-value">–</span></td>' +
+        '<td class="budget" data-label="6-Minuten-Budget" id="bud' + i + '">' +
+          '<div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>' +
+          '<div class="bar-note">–</div>' +
+        '</td>';
+      tb.appendChild(tr);
+    });
+  }
+
+  function markStale(){
+    $("mittelCard").classList.add("stale");
+  }
+
+  function renderRules(v, n, strictest){
+    // ok: true = eingehalten, false = beachten, null = noch nichts erfasst
+    var items = [
+      {
+        ok: n > 0 ? n <= 1 : null,
+        text: "Max. 1 Einsatzmittel pro Raum",
+        state: n > 0 ? n + " Einsatzmittel erfasst" : "Noch nichts erfasst"
+      },
+      {
+        ok: v > 0 ? v >= MIN_M3 : null,
+        text: "Raumgrösse min. 40 m³",
+        state: v > 0 ? fmt(v, 1) + " m³ erfasst" : "Noch kein Volumen erfasst"
+      },
+      {
+        ok: strictest === null ? null : strictest >= MAX_MIN,
+        text: "Max. 6 Minuten Einsatzzeit",
+        state: strictest === null
+          ? "Noch nicht berechnet"
+          : (strictest < MAX_MIN
+              ? "Grenzwert bei " + fmt(strictest, 1) + " Min — strenger als die Regel"
+              : "Grenzwert erst bei " + fmt(strictest, 1) + " Min — 6 Min gilt")
+      }
+    ];
+
+    var box = $("rules");
+    box.innerHTML = "";
+    items.forEach(function(it){
+      var cls = it.ok === null ? " open" : (it.ok ? "" : " warn");
+      var txt = it.ok === null ? "Offen" : (it.ok ? "Eingehalten" : "Beachten");
+      var row = document.createElement("div");
+      row.className = "rule-row";
+      row.innerHTML =
+        '<div>' +
+          '<div class="rule-text">' + it.text + '</div>' +
+          '<div class="rule-state">' + it.state + '</div>' +
+        '</div>' +
+        '<span class="tag' + cls + '">' + txt + '</span>';
+      box.appendChild(row);
+    });
+  }
+
+  function calc(){
+    var v = volume();
+    var n = parseInt($("anzahl").value, 10) || 0;
+    var strictest = null;      // kleinster Grenzwert in Minuten
+
+    MITTEL.forEach(function(m, i){
+      var g = parseFloat($("g" + i).value) || 0;
+      var tdW = $("wait" + i), tdM = $("max" + i), tdB = $("bud" + i);
+
+      if (v <= 0 || n <= 0 || g <= 0){
+        tdW.innerHTML = '<span class="out-value">–</span>';
+        tdM.innerHTML = '<span class="out-value">–</span>';
+        tdB.innerHTML = '<div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>' +
+                        '<div class="bar-note">Werte fehlen</div>';
+        return;
+      }
+
+      var masse     = g * n * 1000;            // mg Wirkstoff total
+      var wartezeit = ICT50 * v * 60 / masse;  // Sekunden
+      var maxMin    = LCT10 * v / masse;       // Minuten, effektiver Grenzwert
+      var ueber     = maxMin > MAX_MIN;
+
+      if (strictest === null || maxMin < strictest) strictest = maxMin;
+
+      tdW.innerHTML = '<span class="out-value">' + fmt(wartezeit, 1) + '<span class="out-unit">Sek</span></span>';
+      tdM.innerHTML = '<span class="out-value">' + fmt(maxMin, 1) + '<span class="out-unit">Min</span></span>';
+
+      var pct = Math.max(0, Math.min(100, maxMin / MAX_MIN * 100));
+      tdB.innerHTML =
+        '<div class="bar-track"><div class="bar-fill' + (ueber ? ' warn' : '') +
+          '" style="width:' + pct.toFixed(1) + '%"></div></div>' +
+        '<div class="bar-note' + (ueber ? ' warn' : '') + '">' +
+          (ueber
+            ? 'Über 6 Min — 6 Min gelten als Obergrenze'
+            : 'Unter 6 Min — Grenzwert bindet vor der Regel') +
+        '</div>';
+    });
+
+    var hint = $("volumeHint");
+    hint.textContent = v > 0
+      ? "Raumvolumen: " + fmt(v, 1) + " m³" + (v < MIN_M3 ? " — unter der Mindestgrösse von 40 m³" : "")
+      : "Raumvolumen: noch nicht erfasst";
+    hint.classList.toggle("warn", v > 0 && v < MIN_M3);
+
+    $("anzahlPill").textContent = n > 0 ? n : "–";
+
+    renderRules(v, n, strictest);
+
+    $("mittelCard").classList.remove("stale");
+  }
+
+  function syncMode(){
+    var direkt = isDirekt();
+    ["laenge","breite","hoehe"].forEach(function(id){ $(id).disabled = direkt; });
+    $("direkt").disabled = !direkt;
+    $("rowMasse").classList.toggle("off", direkt);
+    $("rowDirekt").classList.toggle("off", !direkt);
+  }
+
+  function reset(){
+    $("modusMasse").checked = true;
+    $("laenge").value = "";
+    $("breite").value = "";
+    $("hoehe").value  = "";
+    $("direkt").value = "";
+    $("anzahl").value = 1;
+    MITTEL.forEach(function(m, i){ $("g" + i).value = m.g; });
+    syncMode();
+    calc();
+  }
+
+  buildRows();
+
+  var heute = new Date().toLocaleDateString("de-CH", {
+    weekday:"long", day:"2-digit", month:"long", year:"numeric"
+  });
+  var stunde = new Date().getHours();
+  $("gruss").textContent =
+      stunde < 5  ? "Gute Nacht"
+    : stunde < 11 ? "Guten Morgen"
+    : stunde < 17 ? "Guten Tag"
+    : stunde < 22 ? "Guten Abend"
+    :               "Gute Nacht";
+
+  $("todayDate").textContent  = heute;
+  $("todayDate2").textContent = heute;
+
+  // ---------- Ansichtswechsel ----------
+  function showView(name){
+    document.querySelectorAll(".view").forEach(function(v){
+      v.classList.toggle("active", v.id === "view-" + name);
+    });
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll("[data-goto]").forEach(function(el){
+    el.addEventListener("click", function(){ showView(el.getAttribute("data-goto")); });
+  });
+
+  document.addEventListener("input", function(e){
+    if (e.target.tagName === "INPUT") markStale();
+  });
+  document.querySelectorAll('input[name="modus"]').forEach(function(r){
+    r.addEventListener("change", function(){ syncMode(); markStale(); });
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && e.target.tagName === "INPUT"){ e.preventDefault(); calc(); }
+  });
+  $("btnCalc").addEventListener("click", calc);
+  $("btnReset").addEventListener("click", reset);
+
+  // ---------- Einsatzmittel erfassen ----------
+  var modal = $("mittelModal");
+
+  function oeffneModal(){
+    $("neuName").value = "";
+    $("neuWirkstoff").value = "";
+    zeigeFehler("");
+    modal.classList.add("open");
+    $("neuName").focus();
+  }
+
+  function schliesseModal(){
+    modal.classList.remove("open");
+    $("btnAddMittel").focus();
+  }
+
+  function zeigeFehler(text){
+    var box = $("modalError");
+    box.textContent = text;
+    box.classList.toggle("show", !!text);
+  }
+
+  function speichereNeues(){
+    var name = $("neuName").value.trim();
+    var g    = parseFloat($("neuWirkstoff").value);
+
+    if (!name){ zeigeFehler("Bitte eine Bezeichnung eingeben."); $("neuName").focus(); return; }
+    if (name.length > 80){ zeigeFehler("Die Bezeichnung ist zu lang (max. 80 Zeichen)."); return; }
+    if (!isFinite(g) || g <= 0){ zeigeFehler("Bitte eine Wirkstoffmenge grösser als 0 eingeben."); $("neuWirkstoff").focus(); return; }
+
+    var doppelt = MITTEL.some(function(m){ return m.name.toLowerCase() === name.toLowerCase(); });
+    if (doppelt){ zeigeFehler("Ein Einsatzmittel mit dieser Bezeichnung gibt es bereits."); return; }
+
+    uebernehmeWirkstoff();
+    MITTEL.push({ name: name, g: g });
+    speichereMittel();
+    buildRows();
+    fuelleTimerAuswahl();
+    calc();
+    schliesseModal();
+  }
+
+  function entferneMittel(i){
+    if (MITTEL.length <= 1){
+      window.alert("Das letzte Einsatzmittel lässt sich nicht entfernen.");
+      return;
+    }
+    if (!window.confirm("„" + MITTEL[i].name + "“ entfernen?")) return;
+    uebernehmeWirkstoff();
+    MITTEL.splice(i, 1);
+    speichereMittel();
+    buildRows();
+    fuelleTimerAuswahl();
+    resetUhr();
+    calc();
+  }
+
+  $("btnAddMittel").addEventListener("click", oeffneModal);
+  $("modalClose").addEventListener("click", schliesseModal);
+  $("modalCancel").addEventListener("click", schliesseModal);
+  $("modalSave").addEventListener("click", speichereNeues);
+
+  modal.addEventListener("click", function(e){
+    if (e.target === modal) schliesseModal();
+  });
+  modal.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && e.target.tagName === "INPUT"){ e.preventDefault(); speichereNeues(); }
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && modal.classList.contains("open")) schliesseModal();
+  });
+
+  $("tbody").addEventListener("click", function(e){
+    var btn = e.target.closest ? e.target.closest("[data-remove]") : null;
+    if (btn) entferneMittel(parseInt(btn.getAttribute("data-remove"), 10));
+  });
+
+  // Wirkstoffmengen dauerhaft merken
+  $("tbody").addEventListener("change", function(e){
+    if (e.target.tagName === "INPUT"){ uebernehmeWirkstoff(); speichereMittel(); }
+  });
+
+  // ---------- Einsatzuhr ----------
+  // Rechnet mit der aufgenommenen Dosis in mg·min/m³. Kommt ein zweites
+  // Einsatzmittel dazu, steigt die Konzentration und die Restzeiten verkürzen sich.
+  var uhrLaeuft    = false;
+  var uhrGestartet = false;
+  var gewaehlt     = 0;          // Index für den ersten Einsatz
+  var anzahlJe     = [];         // eingesetzte Stückzahl pro Einsatzmittel
+  var uhrVolumen   = 0;          // beim Start festgehaltenes Raumvolumen in m³
+  var dosis        = 0;          // aufgenommene Dosis in mg·min/m³
+  var letzterTick  = 0;
+  var startZeit    = 0;
+  var wirkungZeit  = null;       // Zeitstempel, ab dem ICT 50 erreicht ist
+  var uhrHandle    = null;
+  var restMaxGehalten = MAX_MIN * 60;
+
+  function leereAnzahl(){
+    anzahlJe = MITTEL.map(function(){ return 0; });
+  }
+
+  function gesamtStueck(){
+    return anzahlJe.reduce(function(a, b){ return a + b; }, 0);
+  }
+
+  // Wirkstoffmasse aller eingesetzten Mittel in mg
+  function gesamtMasse(){
+    var mg = 0;
+    MITTEL.forEach(function(m, i){ mg += (anzahlJe[i] || 0) * m.g * 1000; });
+    return mg;
+  }
+
+  // Konzentration in mg/m³
+  function konzentration(){
+    return uhrVolumen > 0 ? gesamtMasse() / uhrVolumen : 0;
+  }
+
+  function fuelleTimerAuswahl(){
+    while (anzahlJe.length < MITTEL.length) anzahlJe.push(0);
+    if (anzahlJe.length > MITTEL.length) anzahlJe.length = MITTEL.length;
+    if (gewaehlt >= MITTEL.length) gewaehlt = 0;
+
+    var box = $("mittelChoice");
+    box.innerHTML = "";
+    MITTEL.forEach(function(m, i){
+      var row = document.createElement("div");
+      row.className = "choice-row";
+
+      var name = document.createElement("button");
+      name.type = "button";
+      name.className = "choice-btn";
+      name.textContent = m.name;
+      name.setAttribute("aria-pressed", (!uhrGestartet && i === gewaehlt) ? "true" : "false");
+      name.setAttribute("data-mittel", i);
+      name.disabled = uhrGestartet;
+
+      var zahl = document.createElement("div");
+      zahl.className = "choice-count" + ((anzahlJe[i] || 0) > 0 ? " aktiv" : "");
+      zahl.textContent = (anzahlJe[i] || 0) + "×";
+
+      var plus = document.createElement("button");
+      plus.type = "button";
+      plus.className = "choice-plus";
+      plus.textContent = "+";
+      plus.setAttribute("data-plus", i);
+      plus.setAttribute("aria-label", "Ein weiteres " + m.name + " einsetzen");
+      plus.disabled = !uhrGestartet;
+
+      row.appendChild(name);
+      row.appendChild(zahl);
+      row.appendChild(plus);
+      box.appendChild(row);
+    });
+  }
+
+  function zeichneAnzahl(){
+    $("einsatzCount").textContent = gesamtStueck();
+    var teile = [];
+    MITTEL.forEach(function(m, i){
+      if ((anzahlJe[i] || 0) > 0) teile.push(anzahlJe[i] + "× " + m.name);
+    });
+    $("einsatzDetail").textContent = teile.length
+      ? teile.join(" · ") + " — " + fmt(gesamtMasse() / 1000, 1) + " g Wirkstoff in " + fmt(uhrVolumen, 1) + " m³"
+      : "Noch kein Einsatz";
+  }
+
+  function mmss(sek){
+    sek = Math.max(0, Math.ceil(sek));
+    var m = Math.floor(sek / 60), s = sek % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function mmssAb(sek){
+    sek = Math.max(0, Math.floor(sek));
+    var m = Math.floor(sek / 60), s = sek % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function setzeStartLabel(){
+    $("timerStart").textContent = uhrLaeuft ? "Stopp"
+      : (uhrGestartet ? "Weiter" : "Einsatz starten");
+  }
+
+  // Dosis bis jetzt fortschreiben
+  function dosisFortschreiben(){
+    if (!uhrLaeuft) return;
+    var jetzt = Date.now();
+    var c = konzentration();
+    dosis += c * (jetzt - letzterTick) / 60000;
+    letzterTick = jetzt;
+    if (wirkungZeit === null && dosis >= ICT50) wirkungZeit = jetzt;
+  }
+
+  function zeichneUhr(){
+    dosisFortschreiben();
+
+    var jetzt = Date.now();
+    var c = konzentration();
+
+    // Wartezeit: bis ICT 50, danach Pluszeit seit Wirkungseintritt
+    var waitFertig = uhrGestartet && dosis >= ICT50;
+    var restWait = (c > 0 && !waitFertig) ? (ICT50 - dosis) / c * 60 : 0;
+
+    // Effektiver Grenzwert: bis 10 % LCT 50
+    var effFertig = uhrGestartet && dosis >= LCT10;
+    var restEff = (c > 0 && !effFertig) ? (LCT10 - dosis) / c * 60 : 0;
+
+    // Regelzeit: feste 6 Minuten ab Einsatzbeginn
+    var restMax = uhrGestartet ? Math.max(0, MAX_MIN * 60 - (jetzt - startZeit) / 1000) : MAX_MIN * 60;
+    if (!uhrLaeuft && uhrGestartet) restMax = restMaxGehalten;
+    var maxFertig = uhrGestartet && restMax <= 0;
+
+    $("timerWaitValue").textContent = !uhrGestartet ? "–"
+      : (waitFertig ? "+" + mmssAb((jetzt - (wirkungZeit || jetzt)) / 1000) : Math.ceil(restWait) + " Sek");
+    $("timerMaxValue").textContent = mmss(restMax);
+    $("timerEffValue").textContent = uhrGestartet ? mmss(restEff) : "–";
+
+    $("boxWait").classList.toggle("ok",  waitFertig);
+    $("boxMax").classList.toggle("over", maxFertig);
+    $("boxEff").classList.toggle("crit", effFertig);
+
+    var zustand = uhrLaeuft ? "läuft" : "angehalten";
+    $("timerWaitState").textContent = !uhrGestartet ? ""
+      : (waitFertig ? (uhrLaeuft ? "Wirkung erreicht — seit" : "Wirkung erreicht — angehalten") : zustand);
+    $("timerMaxState").textContent = !uhrGestartet ? ""
+      : (maxFertig ? "6 Minuten abgelaufen" : zustand);
+    $("timerEffState").textContent = !uhrGestartet ? ""
+      : (effFertig ? "Grenzwert erreicht" : zustand);
+  }
+
+  function uhrTicken(){
+    if (uhrHandle) window.clearInterval(uhrHandle);
+    uhrHandle = window.setInterval(zeichneUhr, 200);
+  }
+
+  function setzeHinweis(){
+    var hint = $("timerHint");
+    var c = konzentration();
+    if (c <= 0){ hint.textContent = "Noch kein Einsatzmittel erfasst."; hint.classList.add("warn"); return; }
+    var grenzeMin = LCT10 / c;
+    if (grenzeMin < MAX_MIN){
+      hint.textContent = "Achtung: Grenzwert bei " + fmt(grenzeMin, 1) +
+        " Min — früher abbrechen als nach 6 Minuten.";
+      hint.classList.add("warn");
+    } else {
+      hint.textContent = gesamtStueck() + " Einsatzmittel · " + fmt(gesamtMasse() / 1000, 1) +
+        " g · Konzentration " + fmt(c, 0) + " mg/m³ · Grenzwert " + fmt(grenzeMin, 1) + " Min";
+      hint.classList.remove("warn");
+    }
+  }
+
+  function starteUhr(){
+    var hint = $("timerHint");
+
+    if (uhrGestartet){                       // fortsetzen
+      letzterTick = Date.now();
+      startZeit = Date.now() - (MAX_MIN * 60 - restMaxGehalten) * 1000;
+      uhrLaeuft = true;
+      setzeStartLabel();
+      fuelleTimerAuswahl();
+      uhrTicken();
+      zeichneUhr();
+      return;
+    }
+
+    uebernehmeWirkstoff();
+    var v = volume();
+    var m = MITTEL[gewaehlt];
+    if (v <= 0 || !m || !(m.g > 0)){
+      hint.textContent = "Zuerst das Raumvolumen erfassen.";
+      hint.classList.add("warn");
+      return;
+    }
+
+    uhrVolumen = v;
+    leereAnzahl();
+    anzahlJe[gewaehlt] = 1;
+    dosis = 0;
+    wirkungZeit = null;
+    startZeit = Date.now();
+    letzterTick = startZeit;
+    restMaxGehalten = MAX_MIN * 60;
+    uhrLaeuft = true;
+    uhrGestartet = true;
+
+    $("boxWait").classList.remove("ok");
+    $("boxMax").classList.remove("over");
+    $("boxEff").classList.remove("crit");
+    setzeStartLabel();
+    fuelleTimerAuswahl();
+    zeichneAnzahl();
+    setzeHinweis();
+    uhrTicken();
+    zeichneUhr();
+  }
+
+  // Ein weiteres Einsatzmittel während des laufenden Einsatzes
+  function weiteresMittel(i){
+    if (!uhrGestartet || !MITTEL[i]) return;
+    dosisFortschreiben();                    // Dosis mit der alten Konzentration abschliessen
+    anzahlJe[i] = (anzahlJe[i] || 0) + 1;
+    letzterTick = Date.now();
+    zeichneAnzahl();
+    fuelleTimerAuswahl();
+    setzeHinweis();
+    zeichneUhr();
+  }
+
+  function stoppeUhr(){
+    dosisFortschreiben();
+    if (uhrLaeuft) restMaxGehalten = Math.max(0, MAX_MIN * 60 - (Date.now() - startZeit) / 1000);
+    uhrLaeuft = false;
+    if (uhrHandle){ window.clearInterval(uhrHandle); uhrHandle = null; }
+    setzeStartLabel();
+    zeichneUhr();
+  }
+
+  function resetUhr(){
+    if (uhrHandle){ window.clearInterval(uhrHandle); uhrHandle = null; }
+    uhrLaeuft = false;
+    uhrGestartet = false;
+    leereAnzahl();
+    uhrVolumen = 0;
+    dosis = 0;
+    wirkungZeit = null;
+    restMaxGehalten = MAX_MIN * 60;
+    $("boxWait").classList.remove("ok");
+    $("boxMax").classList.remove("over");
+    $("boxEff").classList.remove("crit");
+    setzeStartLabel();
+    fuelleTimerAuswahl();
+    zeichneAnzahl();
+    var hint = $("timerHint");
+    hint.textContent = "Raumvolumen erfassen, dann lässt sich der Einsatz starten.";
+    hint.classList.remove("warn");
+    zeichneUhr();
+  }
+
+  $("timerStart").addEventListener("click", function(){
+    if (uhrLaeuft) stoppeUhr(); else starteUhr();
+  });
+  $("timerReset").addEventListener("click", resetUhr);
+
+  $("mittelChoice").addEventListener("click", function(e){
+    var ziel = e.target.closest ? e.target : null;
+    if (!ziel) return;
+    var plus = ziel.closest("[data-plus]");
+    if (plus && !plus.disabled){ weiteresMittel(parseInt(plus.getAttribute("data-plus"), 10)); return; }
+    var wahl = ziel.closest("[data-mittel]");
+    if (wahl && !wahl.disabled){
+      gewaehlt = parseInt(wahl.getAttribute("data-mittel"), 10);
+      fuelleTimerAuswahl();
+    }
+  });
+
+  leereAnzahl();
+  fuelleTimerAuswahl();
+  resetUhr();
+
+  syncMode();
+  calc();
+})();
+</script>
+
+
+</body>
+</html>
