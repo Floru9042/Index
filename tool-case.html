@@ -2,8 +2,14 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Tool Case</title>
+<link rel="apple-touch-icon" href="tool-case-icon.png">
+<link rel="icon" type="image/png" href="tool-case-icon.png">
+<meta name="apple-mobile-web-app-title" content="Tool Case">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
 <style>
   :root{
     --cream: #C6CAB9;
@@ -40,7 +46,7 @@
   /* ---------- Header ---------- */
   .app-header{
     background: var(--sidebar);
-    padding: 16px clamp(16px, 4vw, 28px);
+    padding: calc(16px + env(safe-area-inset-top, 0px)) clamp(16px, 4vw, 28px) 16px;
     position: sticky;
     top:0;
     z-index: 20;
@@ -55,7 +61,11 @@
   }
   .brand-sub{ font-size:12px; color:#FFFFFF; }
 
-  main{ padding: clamp(20px, 4vw, 44px); max-width:1400px; }
+  main{
+    padding: clamp(20px, 4vw, 44px);
+    padding-bottom: calc(clamp(20px, 4vw, 44px) + env(safe-area-inset-bottom, 0px));
+    max-width:1400px;
+  }
 
   /* ---------- Ansichten ---------- */
   .view{ display:none; }
@@ -85,6 +95,7 @@
     border-radius:16px;
     padding:18px 20px;
     cursor:pointer; text-align:left; width:100%;
+    color:#000000;
     font-family: Arial, Helvetica, sans-serif;
     transition: transform .15s ease, box-shadow .15s ease;
   }
@@ -97,7 +108,7 @@
     background: var(--cream-dim);
     display:flex; align-items:center; justify-content:center;
   }
-  .quick-link-title{ font-family: Arial, Helvetica, sans-serif; font-weight:700; font-size:15px; }
+  .quick-link-title{ font-family: Arial, Helvetica, sans-serif; font-weight:700; font-size:15px; color:#000000; }
   .quick-link-sub{ font-size:12.5px; color: var(--ink-soft); margin-top:2px; }
 
   .empty-state{
@@ -366,7 +377,8 @@
     position:fixed; inset:0; z-index:100;
     background: rgba(24,28,20,0.5);
     display:none; align-items:center; justify-content:center;
-    padding:24px;
+    padding: calc(24px + env(safe-area-inset-top, 0px)) 24px
+             calc(24px + env(safe-area-inset-bottom, 0px));
   }
   .modal-overlay.open{ display:flex; }
   .modal-card{
@@ -454,6 +466,9 @@
   .btn-secondary:hover{ background:#878E70; }
   .data-actions .btn-secondary,
   .data-actions .add-btn{ padding:9px 16px; font-size:13px; }
+  /* iOS färbt Buttons ohne eigene Angabe blau ein */
+  button{ color:#000000; }
+  .add-btn, .add-btn *{ color:#FFFFFF; }
   button:focus-visible, input:focus-visible{ outline:2px solid var(--steel); outline-offset:2px; }
 
   .footnote{ font-size:12px; color:var(--ink-soft); margin: 4px 0 0; line-height:1.6; }
