@@ -736,7 +736,7 @@
 
     <div class="modal-field">
       <label for="neuName">Bezeichnung</label>
-      <input type="text" id="neuName" placeholder="OC mittel" autocomplete="off">
+      <input type="text" id="neuName" placeholder="Reizstoffpatrone (CS kurz)" autocomplete="off">
     </div>
 
     <div class="modal-field">
@@ -756,8 +756,8 @@
   "use strict";
 
   var STANDARD = [
-    { name:"OC lang", g:2 },
-    { name:"OC kurz", g:6 }
+    { name:"Reizstoffpatrone (CS kurz)", g:6 },
+    { name:"Reizstoffpatrone (CS lang)", g:2 }
   ];
   var SPEICHER = "konsole-mittel-liste";
 
@@ -768,8 +768,10 @@
       var liste = JSON.parse(roh);
       if (!Array.isArray(liste)) throw 0;
       var ALT = {
-        "Reizstoff Patrone Kal. 12, CS / OC lang": "OC lang",
-        "Reizstoff Patrone Kal. 12, CS / OC kurz": "OC kurz"
+        "Reizstoff Patrone Kal. 12, CS / OC lang": "Reizstoffpatrone (CS lang)",
+        "Reizstoff Patrone Kal. 12, CS / OC kurz": "Reizstoffpatrone (CS kurz)",
+        "OC lang": "Reizstoffpatrone (CS lang)",
+        "OC kurz": "Reizstoffpatrone (CS kurz)"
       };
       var sauber = [];
       liste.forEach(function(m){
