@@ -22,6 +22,7 @@
     --sand-soft: #DCC79A;
     --line: #B3B8A4;
     --card: #DDE0D3;
+  --row: #E9EBE2;
     --warn: #A83824;
     --warn-soft: #EBD6CF;
     --ok: #2F6B3D;
@@ -51,13 +52,14 @@
     top:0;
     z-index: 20;
   }
-  .brand{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:baseline; justify-content:center; gap:10px; flex-wrap:wrap; }
   .brand-mark{
     font-family: Arial, Helvetica, sans-serif;
-    font-size:19px;
+    font-size:24px;
     font-weight:700;
     color:#fff;
-    letter-spacing:-0.01em;
+    letter-spacing:0.14em;
+    padding-left:0.14em;   /* gleicht die Laufweite am Wortende aus, damit es optisch mittig sitzt */
   }
   .brand-sub{ font-size:12px; color:#FFFFFF; }
 
@@ -134,7 +136,7 @@
     margin:0; letter-spacing:-0.02em;
   }
   .today{ font-size:14px; color: var(--ink-soft); }
-  .gruss{ font-size:15px; color: var(--ink-soft); margin-top:8px; }
+  .today-unter{ margin-top:6px; }
   .topbar-right{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
   .data-actions{ display:flex; gap:10px; flex-wrap:wrap; }
 
@@ -219,27 +221,33 @@
 
   /* ---------- Tabelle ---------- */
   .table-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  table{ width:100%; border-collapse:collapse; font-size:13px; }
+  table{ width:100%; border-collapse:separate; border-spacing:0 10px; font-size:13px; margin-top:-10px; }
   th{
     text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:0.05em;
     color:var(--ink-soft); font-weight:600; padding:8px 6px; border-bottom:1px solid var(--line);
   }
   th.num, td.num{ text-align:right; }
-  td{ padding:14px 6px; border-bottom:1px solid var(--cream-dim); vertical-align:middle; }
-  tr:last-child td{ border-bottom:none; }
-  td.mittel{ min-width:190px; font-weight:600; }
-  td.wirkstoff{ width:120px; }
-  td.wirkstoff input[type="number"]{
-    font-size:17px; padding:9px 10px; border-radius:10px; text-align:right;
+  td{ padding:14px 12px; vertical-align:middle; }
+  tbody td{
+    background: var(--row);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
   }
+  tbody td:first-child{
+    border-left:4px solid var(--steel);
+    border-radius:12px 0 0 12px;
+    padding-left:14px;
+  }
+  tbody td:last-child{
+    border-right:1px solid var(--line);
+    border-radius:0 12px 12px 0;
+  }
+  td.mittel{ min-width:190px; font-weight:600; }
+  td.wirkstoff{ width:110px; }
+  .fix-wert{ font-family: Arial, Helvetica, sans-serif; font-size:17px; font-weight:700; white-space:nowrap; }
   .out-value{ font-family: Arial, Helvetica, sans-serif; font-size:22px; font-weight:700; white-space:nowrap; letter-spacing:-0.01em; }
+  .out-max-wert{ color: var(--warn); }
   .out-unit{ font-family: Arial, Helvetica, sans-serif; font-size:12px; font-weight:400; color:var(--ink-soft); margin-left:3px; }
-  td.budget{ min-width:180px; }
-  .bar-track{ height:10px; border-radius:6px; background: var(--cream-dim); overflow:hidden; }
-  .bar-fill{ height:100%; border-radius:6px; background: var(--steel); }
-  .bar-fill.warn{ background: var(--warn); }
-  .bar-note{ font-size:11px; color: var(--ink-soft); margin-top:6px; }
-  .bar-note.warn{ color:#000000; font-weight:600; }
 
   .results.stale .table-scroll{ opacity:.35; }
   .stale-banner{
@@ -257,17 +265,25 @@
     table, tbody{ display:block; width:100%; }
     thead{ display:none; }
 
+    table{ margin-top:0; }
     tbody tr{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap:14px; row-gap:12px;
-      padding:16px 0;
-      border-bottom:1px solid var(--line);
+      grid-template-columns: 0.8fr 1fr 1fr;
+      column-gap:12px; row-gap:12px;
+      padding:16px 16px 16px 14px;
+      margin-bottom:12px;
+      background: var(--row);
+      border:1px solid var(--line);
+      border-left:4px solid var(--steel);
+      border-radius:14px;
     }
-    tbody tr:last-child{ border-bottom:none; padding-bottom:0; }
+    tbody tr:last-child{ margin-bottom:0; }
 
-    tbody td{
-      display:block; padding:0; border:none; text-align:left; min-width:0; width:auto;
+    tbody td,
+    tbody td:first-child,
+    tbody td:last-child{
+      display:block; padding:0; border:none; border-radius:0; background:none;
+      text-align:left; min-width:0; width:auto;
     }
     tbody td::before{
       content: attr(data-label);
@@ -278,14 +294,15 @@
     tbody td.mittel::before{ content:none; }
 
     td.mittel   { grid-column:1 / -1; grid-row:1; font-size:15px; line-height:1.35; }
-    td.wirkstoff{ grid-column:1 / -1; grid-row:2; }
-    td.out-wait { grid-column:1; grid-row:3; }
-    td.out-max  { grid-column:2; grid-row:3; }
-    td.budget   { grid-column:1 / -1; grid-row:4; }
+    tbody td.num{
+      text-align:left;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    td.wirkstoff{ grid-column:1; grid-row:2; }
+    td.out-wait { grid-column:2; grid-row:2; }
+    td.out-max  { grid-column:3; grid-row:2; }
 
-    td.wirkstoff input[type="number"]{ width:100%; text-align:left; }
     .out-value{ font-size:20px; }
-    .bar-note{ margin-top:7px; font-size:12px; }
   }
 
   /* ---------- Einsatzuhr ---------- */
@@ -372,64 +389,6 @@
   }
   .timer-hint.warn{ background: var(--warn-soft); }
 
-  /* ---------- Popup ---------- */
-  .modal-overlay{
-    position:fixed; inset:0; z-index:100;
-    background: rgba(24,28,20,0.5);
-    display:none; align-items:center; justify-content:center;
-    padding: calc(24px + env(safe-area-inset-top, 0px)) 24px
-             calc(24px + env(safe-area-inset-bottom, 0px));
-  }
-  .modal-overlay.open{ display:flex; }
-  .modal-card{
-    background: var(--card);
-    border:1px solid var(--line);
-    border-radius:22px;
-    padding: clamp(24px, 4vw, 34px);
-    max-width:460px; width:100%;
-    position:relative;
-    max-height:90vh; overflow-y:auto;
-    box-shadow: 0 30px 60px -20px rgba(20,24,18,0.45);
-  }
-  .modal-close{
-    position:absolute; top:18px; right:18px;
-    width:32px; height:32px; border-radius:50%;
-    border:1px solid var(--line); background: var(--cream-dim);
-    color:#000000; font-size:16px; line-height:1; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .modal-close:hover{ background: var(--line); }
-  .modal-field{ margin-bottom:16px; }
-  .modal-field label{ display:block; font-size:12px; color:var(--ink-soft);
-    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:7px; }
-  .modal-field input{
-    width:100%;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size:18px; font-weight:700; color:var(--ink);
-    background: var(--cream-dim);
-    border:1px solid var(--line); border-radius:12px;
-    padding:11px 14px; outline:none;
-  }
-  .modal-field input:focus{ border-color: var(--steel); background:#EFF1E8; }
-  .modal-field input::placeholder{ color:#6E7566; font-weight:400; opacity:1; }
-  .modal-error{
-    display:none; background: var(--warn-soft); color:#000000;
-    border-radius:10px; padding:10px 13px; font-size:13px; font-weight:600;
-    margin-bottom:16px;
-  }
-  .modal-error.show{ display:block; }
-  .modal-actions{ display:flex; gap:10px; margin-top:22px; }
-  .modal-actions button{ flex:1 1 0; }
-
-  .row-remove{
-    margin-left:8px; padding:2px 7px;
-    border:1px solid var(--line); border-radius:6px;
-    background: var(--cream-dim); color:#000000;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size:12px; line-height:1.4; cursor:pointer; font-weight:700;
-  }
-  .row-remove:hover{ background: var(--warn-soft); }
-
   /* ---------- Grundsätze ---------- */
   .rule-row{
     display:flex; align-items:center; justify-content:space-between;
@@ -471,7 +430,6 @@
   .add-btn, .add-btn *{ color:#FFFFFF; }
   button:focus-visible, input:focus-visible{ outline:2px solid var(--steel); outline-offset:2px; }
 
-  .footnote{ font-size:12px; color:var(--ink-soft); margin: 4px 0 0; line-height:1.6; }
 
   @media print{
     .app-header{ position:static; }
@@ -488,7 +446,7 @@
 
   <header class="app-header">
     <div class="brand">
-      <span class="brand-mark">Tool Case</span>
+      <span class="brand-mark">TOOL CASE</span>
     </div>
   </header>
 
@@ -498,11 +456,8 @@
     <div id="view-start" class="view active">
       <div class="topbar">
         <div>
-          <h1>Übersicht</h1>
-          <div class="gruss" id="gruss"></div>
-        </div>
-        <div class="topbar-right">
-          <div class="today" id="todayDate"></div>
+          <h1 id="gruss">Willkommen</h1>
+          <div class="today today-unter" id="todayDate"></div>
         </div>
       </div>
 
@@ -549,8 +504,7 @@
 
     <div class="topbar">
       <div>
-        <div class="eyebrow">Reizstoffrechner</div>
-        <h1>Einsatzzeiten berechnen</h1>
+        <h1>Reizstoffrechner</h1>
       </div>
       <div class="topbar-right">
         <div class="today" id="todayDate2"></div>
@@ -659,8 +613,7 @@
 
     <!-- Einsatzmittel -->
     <div class="card results" id="mittelCard">
-      <div class="card-title">Einsatzmittel</div>
-      <p class="card-sub">Wartezeit bis ICT 50, max. Einsatz bis 10 % LCT 50. Wirkstoffmenge pro Einsatzmittel ist überschreibbar.</p>
+      <div class="card-title" style="margin-bottom:16px;">Einsatzmittel</div>
 
       <div class="stale-banner">Eingaben geändert — auf «Berechnen» klicken.</div>
 
@@ -669,23 +622,13 @@
           <thead>
             <tr>
               <th>Einsatzmittel</th>
-              <th class="num">Wirkstoff (g)</th>
+              <th class="num">Wirkstoff</th>
               <th class="num">Wartezeit</th>
               <th class="num">Max. Einsatz (effektiv)</th>
-              <th>6-Minuten-Budget</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
         </table>
-      </div>
-
-      <p class="footnote">
-        Wartezeit = 40 · V · 60 / (g · n · 1000) in Sekunden. Max. Einsatz = 2500 · V / (g · n · 1000) in Minuten.
-        V = Raumvolumen in m³, g = Wirkstoff pro Einsatzmittel in Gramm, n = Anzahl Einsatzmittel.
-      </p>
-
-      <div class="card-actions">
-        <button class="add-btn" id="btnAddMittel">Einsatzmittel erfassen</button>
       </div>
     </div>
 
@@ -726,71 +669,23 @@
   </main>
 </div>
 
-<div class="modal-overlay" id="mittelModal" role="dialog" aria-modal="true" aria-labelledby="mittelModalTitel">
-  <div class="modal-card">
-    <button class="modal-close" id="modalClose" aria-label="Schliessen">&times;</button>
-    <div class="card-title" id="mittelModalTitel">Einsatzmittel erfassen</div>
-    <p class="card-sub">Bezeichnung und Wirkstoffmenge pro Stück.</p>
-
-    <div class="modal-error" id="modalError"></div>
-
-    <div class="modal-field">
-      <label for="neuName">Bezeichnung</label>
-      <input type="text" id="neuName" placeholder="Reizstoffpatrone (CS kurz)" autocomplete="off">
-    </div>
-
-    <div class="modal-field">
-      <label for="neuWirkstoff">Wirkstoff in Gramm</label>
-      <input type="number" id="neuWirkstoff" min="0.1" step="0.1" placeholder="6.0" inputmode="decimal">
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn-secondary" id="modalCancel">Abbrechen</button>
-      <button class="add-btn" id="modalSave">Hinzufügen</button>
-    </div>
-  </div>
-</div>
 
 <script>
 (function(){
   "use strict";
 
-  var STANDARD = [
+  // Feste Liste. Änderungen nur hier in der Datei vornehmen.
+  var MITTEL = [
     { name:"Reizstoffpatrone (CS kurz)", g:6 },
     { name:"Reizstoffpatrone (CS lang)", g:2 }
   ];
-  var SPEICHER = "konsole-mittel-liste";
 
-  function ladeMittel(){
-    try {
-      var roh = window.localStorage.getItem(SPEICHER);
-      if (!roh) return STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
-      var liste = JSON.parse(roh);
-      if (!Array.isArray(liste)) throw 0;
-      var ALT = {
-        "Reizstoff Patrone Kal. 12, CS / OC lang": "Reizstoffpatrone (CS lang)",
-        "Reizstoff Patrone Kal. 12, CS / OC kurz": "Reizstoffpatrone (CS kurz)",
-        "OC lang": "Reizstoffpatrone (CS lang)",
-        "OC kurz": "Reizstoffpatrone (CS kurz)"
-      };
-      var sauber = [];
-      liste.forEach(function(m){
-        if (m && ALT[m.name]) m.name = ALT[m.name];
-        if (m && typeof m.name === "string" && m.name.trim() && isFinite(m.g) && m.g > 0){
-          sauber.push({ name: String(m.name).slice(0, 80), g: Number(m.g) });
-        }
-      });
-      return sauber.length ? sauber : STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
-    } catch (e){
-      return STANDARD.map(function(m){ return { name:m.name, g:m.g }; });
-    }
-  }
-
-  function speichereMittel(){
-    try { window.localStorage.setItem(SPEICHER, JSON.stringify(MITTEL)); } catch (e){ /* ohne Speicher weiterarbeiten */ }
-  }
-
-  var MITTEL = ladeMittel();
+  // Früher gespeicherte, abweichende Listen aus dem Browser entfernen
+  try {
+    ["konsole-mittel-liste", "rechner-mittel-liste", "ie-reizstoff-einsatzmittel"].forEach(function(k){
+      window.localStorage.removeItem(k);
+    });
+  } catch (e){ /* ohne Speicherzugriff weiterarbeiten */ }
 
   var ICT50   = 40;    // mg·min/m³
   var LCT10   = 2500;  // mg·min/m³, entspricht 10 % LCT 50
@@ -822,33 +717,17 @@
     });
   }
 
-  // Vom Benutzer geänderte Wirkstoffmengen übernehmen, bevor die Tabelle neu gebaut wird
-  function uebernehmeWirkstoff(){
-    MITTEL.forEach(function(m, i){
-      var f = $("g" + i);
-      if (f){
-        var w = parseFloat(f.value);
-        if (isFinite(w) && w > 0) m.g = w;
-      }
-    });
-  }
-
   function buildRows(){
     var tb = $("tbody");
     tb.innerHTML = "";
     MITTEL.forEach(function(m, i){
       var tr = document.createElement("tr");
       tr.innerHTML =
-        '<td class="mittel">' + esc(m.name) +
-          '<button type="button" class="row-remove" data-remove="' + i + '" aria-label="' + esc(m.name) + ' entfernen">&times;</button></td>' +
-        '<td class="wirkstoff" data-label="Wirkstoff (g)"><input type="number" id="g' + i + '" min="0" step="0.1" value="' + m.g +
-          '" inputmode="decimal" aria-label="Wirkstoff ' + esc(m.name) + '"></td>' +
+        '<td class="mittel">' + esc(m.name) + '</td>' +
+        '<td class="num wirkstoff" data-label="Wirkstoff"><span class="fix-wert">' + fmt(m.g, 1) +
+          '<span class="out-unit">g</span></span></td>' +
         '<td class="num out-wait" data-label="Wartezeit" id="wait' + i + '"><span class="out-value">–</span></td>' +
-        '<td class="num out-max" data-label="Max. Einsatz (effektiv)" id="max' + i + '"><span class="out-value">–</span></td>' +
-        '<td class="budget" data-label="6-Minuten-Budget" id="bud' + i + '">' +
-          '<div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>' +
-          '<div class="bar-note">–</div>' +
-        '</td>';
+        '<td class="num out-max" data-label="Max. Einsatz" id="max' + i + '"><span class="out-value">–</span></td>';
       tb.appendChild(tr);
     });
   }
@@ -904,36 +783,23 @@
     var strictest = null;      // kleinster Grenzwert in Minuten
 
     MITTEL.forEach(function(m, i){
-      var g = parseFloat($("g" + i).value) || 0;
-      var tdW = $("wait" + i), tdM = $("max" + i), tdB = $("bud" + i);
+      var g = m.g;
+      var tdW = $("wait" + i), tdM = $("max" + i);
 
       if (v <= 0 || n <= 0 || g <= 0){
         tdW.innerHTML = '<span class="out-value">–</span>';
         tdM.innerHTML = '<span class="out-value">–</span>';
-        tdB.innerHTML = '<div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>' +
-                        '<div class="bar-note">Werte fehlen</div>';
         return;
       }
 
       var masse     = g * n * 1000;            // mg Wirkstoff total
       var wartezeit = ICT50 * v * 60 / masse;  // Sekunden
       var maxMin    = LCT10 * v / masse;       // Minuten, effektiver Grenzwert
-      var ueber     = maxMin > MAX_MIN;
 
       if (strictest === null || maxMin < strictest) strictest = maxMin;
 
       tdW.innerHTML = '<span class="out-value">' + fmt(wartezeit, 1) + '<span class="out-unit">Sek</span></span>';
-      tdM.innerHTML = '<span class="out-value">' + fmt(maxMin, 1) + '<span class="out-unit">Min</span></span>';
-
-      var pct = Math.max(0, Math.min(100, maxMin / MAX_MIN * 100));
-      tdB.innerHTML =
-        '<div class="bar-track"><div class="bar-fill' + (ueber ? ' warn' : '') +
-          '" style="width:' + pct.toFixed(1) + '%"></div></div>' +
-        '<div class="bar-note' + (ueber ? ' warn' : '') + '">' +
-          (ueber
-            ? 'Über 6 Min — 6 Min gelten als Obergrenze'
-            : 'Unter 6 Min — Grenzwert bindet vor der Regel') +
-        '</div>';
+      tdM.innerHTML = '<span class="out-value out-max-wert">' + fmt(maxMin, 1) + '<span class="out-unit">Min</span></span>';
     });
 
     var hint = $("volumeHint");
@@ -964,7 +830,6 @@
     $("hoehe").value  = "";
     $("direkt").value = "";
     $("anzahl").value = 1;
-    MITTEL.forEach(function(m, i){ $("g" + i).value = m.g; });
     syncMode();
     calc();
   }
@@ -1007,88 +872,6 @@
   });
   $("btnCalc").addEventListener("click", calc);
   $("btnReset").addEventListener("click", reset);
-
-  // ---------- Einsatzmittel erfassen ----------
-  var modal = $("mittelModal");
-
-  function oeffneModal(){
-    $("neuName").value = "";
-    $("neuWirkstoff").value = "";
-    zeigeFehler("");
-    modal.classList.add("open");
-    $("neuName").focus();
-  }
-
-  function schliesseModal(){
-    modal.classList.remove("open");
-    $("btnAddMittel").focus();
-  }
-
-  function zeigeFehler(text){
-    var box = $("modalError");
-    box.textContent = text;
-    box.classList.toggle("show", !!text);
-  }
-
-  function speichereNeues(){
-    var name = $("neuName").value.trim();
-    var g    = parseFloat($("neuWirkstoff").value);
-
-    if (!name){ zeigeFehler("Bitte eine Bezeichnung eingeben."); $("neuName").focus(); return; }
-    if (name.length > 80){ zeigeFehler("Die Bezeichnung ist zu lang (max. 80 Zeichen)."); return; }
-    if (!isFinite(g) || g <= 0){ zeigeFehler("Bitte eine Wirkstoffmenge grösser als 0 eingeben."); $("neuWirkstoff").focus(); return; }
-
-    var doppelt = MITTEL.some(function(m){ return m.name.toLowerCase() === name.toLowerCase(); });
-    if (doppelt){ zeigeFehler("Ein Einsatzmittel mit dieser Bezeichnung gibt es bereits."); return; }
-
-    uebernehmeWirkstoff();
-    MITTEL.push({ name: name, g: g });
-    speichereMittel();
-    buildRows();
-    fuelleTimerAuswahl();
-    calc();
-    schliesseModal();
-  }
-
-  function entferneMittel(i){
-    if (MITTEL.length <= 1){
-      window.alert("Das letzte Einsatzmittel lässt sich nicht entfernen.");
-      return;
-    }
-    if (!window.confirm("„" + MITTEL[i].name + "“ entfernen?")) return;
-    uebernehmeWirkstoff();
-    MITTEL.splice(i, 1);
-    speichereMittel();
-    buildRows();
-    fuelleTimerAuswahl();
-    resetUhr();
-    calc();
-  }
-
-  $("btnAddMittel").addEventListener("click", oeffneModal);
-  $("modalClose").addEventListener("click", schliesseModal);
-  $("modalCancel").addEventListener("click", schliesseModal);
-  $("modalSave").addEventListener("click", speichereNeues);
-
-  modal.addEventListener("click", function(e){
-    if (e.target === modal) schliesseModal();
-  });
-  modal.addEventListener("keydown", function(e){
-    if (e.key === "Enter" && e.target.tagName === "INPUT"){ e.preventDefault(); speichereNeues(); }
-  });
-  document.addEventListener("keydown", function(e){
-    if (e.key === "Escape" && modal.classList.contains("open")) schliesseModal();
-  });
-
-  $("tbody").addEventListener("click", function(e){
-    var btn = e.target.closest ? e.target.closest("[data-remove]") : null;
-    if (btn) entferneMittel(parseInt(btn.getAttribute("data-remove"), 10));
-  });
-
-  // Wirkstoffmengen dauerhaft merken
-  $("tbody").addEventListener("change", function(e){
-    if (e.target.tagName === "INPUT"){ uebernehmeWirkstoff(); speichereMittel(); }
-  });
 
   // ---------- Einsatzuhr ----------
   // Rechnet mit der aufgenommenen Dosis in mg·min/m³. Kommt ein zweites
@@ -1273,7 +1056,6 @@
       return;
     }
 
-    uebernehmeWirkstoff();
     var v = volume();
     var m = MITTEL[gewaehlt];
     if (v <= 0 || !m || !(m.g > 0)){
