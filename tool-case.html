@@ -23,6 +23,7 @@
     --line: #B3B8A4;
     --card: #DDE0D3;
   --row: #E9EBE2;
+  --dunkelgruen: #2C4A2F;
     --warn: #A83824;
     --warn-soft: #EBD6CF;
     --ok: #2F6B3D;
@@ -184,6 +185,11 @@
     padding: clamp(20px, 3vw, 30px);
     box-shadow: 0 1px 2px rgba(30,36,39,0.04), 0 12px 30px -18px rgba(30,36,39,0.18);
     margin-bottom:20px;
+  }
+  /* Einsatzmittel hervorheben */
+  #mittelCard{
+    border:8px solid var(--dunkelgruen);
+    box-shadow: 0 2px 4px rgba(30,36,39,0.08), 0 22px 44px -20px rgba(30,36,39,0.45);
   }
   .card-title{ font-family: Arial, Helvetica, sans-serif; font-size:20px; font-weight:700; margin:0 0 4px; letter-spacing:-0.01em; }
   .card-sub{ font-size:13px; color:var(--ink-soft); margin:0 0 22px; }
