@@ -525,6 +525,9 @@
     padding: clamp(26px, 4vw, 40px);
     max-width: 480px;
     width:100%;
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     position:relative;
     box-shadow: 0 30px 60px -20px rgba(43,33,22,0.35);
     animation: modalIn .18s ease;
@@ -1045,7 +1048,7 @@
         <!-- result -->
         <div class="card">
           <div class="card-title">Ergebnis</div>
-          <p class="card-sub">Verhältnis fix: 70&nbsp;% Soja / 30&nbsp;% Kokos.</p>
+          <p class="card-sub">Verhältnis fix: 60&nbsp;% Soja / 40&nbsp;% Kokos.</p>
 
           <div class="jar-section">
             <div class="jar-svg-wrap">
@@ -1069,14 +1072,14 @@
               <div class="layer-row">
                 <span class="swatch soy"></span>
                 <div>
-                  <div class="layer-name">Sojawachs · 70 %</div>
+                  <div class="layer-name">Sojawachs · 60 %</div>
                   <div class="layer-amount" id="soyAmount">350 g</div>
                 </div>
               </div>
               <div class="layer-row">
                 <span class="swatch coco"></span>
                 <div>
-                  <div class="layer-name">Kokoswachs · 30 %</div>
+                  <div class="layer-name">Kokoswachs · 40 %</div>
                   <div class="layer-amount" id="cocoAmount">150 g</div>
                 </div>
               </div>
@@ -1311,8 +1314,8 @@
     // Duft ist im Gesamtgewicht enthalten, Wachs macht den Rest aus
     const duft = total * (fragPct / 100);
     const wax = total - duft;
-    const soy = wax * 0.7;
-    const coco = wax * 0.3;
+    const soy = wax * 0.6;
+    const coco = wax * 0.4;
     const grand = total;
 
     totalWaxHint.textContent = 'Gesamtgewicht der Kerzen: ' + fmt(total) + ' g';
@@ -1325,8 +1328,8 @@
     fragrancePctLabel.textContent = fmt(fragPct) + ' %';
     duftPctInline.textContent = fmt(fragPct) + ' %';
 
-    const cocoHeight = JAR_HEIGHT * 0.3;
-    const soyHeight = JAR_HEIGHT * 0.7;
+    const cocoHeight = JAR_HEIGHT * 0.4;
+    const soyHeight = JAR_HEIGHT * 0.6;
 
     cocoLayer.setAttribute('y', JAR_BOTTOM - cocoHeight);
     cocoLayer.setAttribute('height', cocoHeight + 10);
