@@ -224,7 +224,7 @@
   /* Quick-link cards on dashboard */
   .quick-links{
     display:grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap:16px;
     margin-bottom:26px;
   }
@@ -1008,6 +1008,77 @@
   .mk-unit i{ font-style:normal; font-size:12px; text-transform:none; letter-spacing:0; }
   .mk-small{ font-size:12px; color:var(--ink-soft); line-height:1.5; margin:12px 0 0; }
   .mk-panel button.mk-linkbtn{ border:0; background:none; padding:0; color:var(--coco); text-decoration:underline; font-size:12px; font-weight:600; display:inline; }
+
+  /* ---------- Brenntest ---------- */
+  .bt-head-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  .bt-list{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:20px; margin-bottom:26px; }
+  .bt-card{ cursor:pointer; }
+  .bt-card .duft-name{ margin-bottom:2px; }
+  .bt-card-nr{ font-size:12px; color:var(--ink-soft); font-weight:600; margin-bottom:8px; }
+  .bt-card-meta{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin-bottom:12px; }
+  .bt-pill{ display:inline-block; font-size:11px; padding:3px 9px; border-radius:20px; font-weight:600; background: var(--cream-dim); color: var(--ink-soft); }
+  .bt-pill.ok{ background:#D5EDD5; color:#2E4A2E; }
+  .bt-pill.warn{ background:#FBE3BE; color:#7A4A12; }
+  .bt-pill.bad{ background:#F4C9C1; color:#7E2A1C; }
+  .bt-section{ margin-bottom:20px; }
+  .bt-section .card-sub{ margin-bottom:16px; }
+  .bt-fields{ display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:12px 14px; }
+  .bt-field label{ display:block; font-size:12px; margin-bottom:6px; color:var(--ink-soft); font-weight:600; }
+  .bt input[type="text"], .bt input[type="date"], .bt input[type="time"], .bt select, .bt textarea{
+    width:100%; font-family:'Montserrat', sans-serif; font-size:16px; color:var(--ink);
+    padding:9px 11px; border-radius:10px; border:1px solid var(--line); background:#fff; outline:none;
+    -webkit-appearance:none; appearance:none; min-height:42px;
+  }
+  .bt select{ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236B5D4D' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+  .bt textarea{ min-height:80px; resize:vertical; line-height:1.5; }
+  .bt input:focus, .bt select:focus, .bt textarea:focus{ border-color: var(--coco); }
+  .bt input[readonly]{ background: var(--cream-dim); color: var(--ink-soft); }
+  .bt input.lim-warn, .bt select.lim-warn{ border-color:#E0A04A; background:#FDF1DD; }
+  .bt input.lim-norm, .bt select.lim-norm{ border-color: var(--warn); background:#F9E1DB; }
+  .bt-measure{ border:1px solid var(--line); border-radius:14px; background:#fff; padding:14px 16px 16px; margin-bottom:12px; border-left:5px solid var(--line); }
+  .bt-measure.s-ok{ border-left-color: var(--coco); }
+  .bt-measure.s-warn{ border-left-color:#E0A04A; }
+  .bt-measure.s-norm{ border-left-color: var(--warn); }
+  .bt-measure-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px; }
+  .bt-measure-title{ font-weight:600; font-size:15px; }
+  .bt-measure-calc{ font-size:12.5px; color:var(--ink-soft); margin-top:10px; }
+  .bt-measure .bt-fields{ grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+  .bt-icon-btn{ border:none; background:transparent; color: var(--warn); font-size:18px; line-height:1; cursor:pointer; padding:4px 6px; }
+  .bt-stats{ display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:12px; }
+  .bt-stat{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .bt-stat-label{ font-size:12px; color:var(--ink-soft); font-weight:600; margin-bottom:4px; }
+  .bt-stat-value{ font-size:20px; font-weight:600; }
+  .bt-stat-norm{ font-size:11.5px; color:var(--ink-soft); margin-top:2px; }
+  .bt-stat.warn{ border-color:#E0A04A; background:#FDF1DD; }
+  .bt-stat.norm{ border-color: var(--warn); background:#F9E1DB; }
+  .bt-verdict{ border-radius:14px; padding:14px 16px; font-size:14px; line-height:1.5; margin-bottom:16px; background: var(--cream-dim); color: var(--ink-soft); }
+  .bt-verdict strong{ display:block; font-size:15px; margin-bottom:2px; }
+  .bt-verdict.ok{ background:#E3F2E3; color:#2E4A2E; }
+  .bt-verdict.bad{ background:#F9E1DB; color:#7E2A1C; }
+  .bt-actions{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:8px; }
+  .bt-actions-right{ display:flex; gap:10px; flex-wrap:wrap; }
+  .bt-info summary{ cursor:pointer; font-weight:600; font-size:15px; list-style:none; }
+  .bt-info summary::-webkit-details-marker{ display:none; }
+  .bt-info summary::before{ content:"+"; display:inline-block; width:18px; color: var(--coco); font-weight:700; }
+  .bt-info[open] summary::before{ content:"–"; }
+  .bt-info p, .bt-info li{ font-size:13.5px; line-height:1.6; color: var(--ink); }
+  .bt-info ul{ padding-left:20px; margin:8px 0 0; }
+  .bt-info h4{ margin:16px 0 4px; font-size:14px; }
+  .bt-grenz-table td{ vertical-align:middle; }
+  .bt-grenz-table input{ max-width:110px; }
+  .bt-legend{ display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--ink-soft); margin-top:12px; }
+  .bt-legend span::before{ content:""; display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .bt-legend .l-norm::before{ background:#F9E1DB; border:1px solid var(--warn); }
+  .bt-legend .l-warn::before{ background:#FDF1DD; border:1px solid #E0A04A; }
+  .bt-print-only{ display:none; }
+  @media print{
+    .app-header, .back-link, .no-print, .refresh-btn{ display:none !important; }
+    main{ padding:0; max-width:none; }
+    .card{ box-shadow:none; break-inside:avoid; }
+    .bt-measure{ break-inside:avoid; }
+    .bt-print-only{ display:block; }
+    .bt input, .bt select, .bt textarea{ border-color:#ccc; }
+  }
 </style>
 </head>
 <body>
@@ -1097,6 +1168,19 @@
         <div>
           <div class="quick-link-title">Gravur-Mockup</div>
           <div class="quick-link-sub">Logos & Schriftzüge vorschauen</div>
+        </div>
+      </div>
+      <div class="quick-link-card" data-goto="brenntest">
+        <div class="quick-link-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2B2116" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3c2.5 3 4 5 4 7.5a4 4 0 0 1-8 0C8 8 9.5 6 12 3z"/>
+            <path d="M12 14.5v2.5"/>
+            <rect x="7" y="17" width="10" height="4" rx="1"/>
+          </svg>
+        </div>
+        <div>
+          <div class="quick-link-title">Brenntest</div>
+          <div class="quick-link-sub">Sicherheit prüfen & dokumentieren</div>
         </div>
       </div>
     </div>
@@ -1447,6 +1531,82 @@
       </div>
     </div><!-- /view-mockup -->
 
+    <div id="view-brenntest" class="view bt">
+      <div class="back-link" data-goto="dashboard">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Dashboard
+      </div>
+
+      <!-- Liste -->
+      <div id="btListView">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Sicherheit</div>
+            <h1>Brenntest-Protokolle</h1>
+          </div>
+          <div class="bt-head-actions">
+            <button class="add-btn" id="btNewBtn"><span class="plus">+</span> Neuer Test</button>
+          </div>
+        </div>
+
+        <div class="bt-list" id="btList"></div>
+
+        <div class="card bt-section">
+          <details class="bt-info">
+            <summary>Grenzwerte</summary>
+            <p class="card-sub" style="margin-top:10px;">Normgrenzwerte stammen aus EN 15493:2019 und sollten nur bei einer neuen Normfassung geändert werden. Die internen Warnschwellen sind deine eigenen, strengeren Richtwerte.</p>
+            <div class="table-scroll">
+              <table class="bt-grenz-table">
+                <thead><tr><th>Kriterium</th><th>Normgrenzwert</th><th>Warnschwelle</th><th>Einheit</th></tr></thead>
+                <tbody>
+                  <tr><td>Max. Flammenhöhe</td><td><input type="text" inputmode="decimal" data-grenz="flameN"></td><td><input type="text" inputmode="decimal" data-grenz="flameW"></td><td>mm</td></tr>
+                  <tr><td>Max. Nachglimmzeit (Durchschnitt)</td><td><input type="text" inputmode="decimal" data-grenz="glowN"></td><td><input type="text" inputmode="decimal" data-grenz="glowW"></td><td>s</td></tr>
+                  <tr><td>Max. Dauer Zweitentzündung</td><td><input type="text" inputmode="decimal" data-grenz="secN"></td><td><input type="text" inputmode="decimal" data-grenz="secW"></td><td>s</td></tr>
+                  <tr><td>Max. Gefässtemperatur</td><td>kein Grenzwert</td><td><input type="text" inputmode="decimal" data-grenz="tempW"></td><td>°C</td></tr>
+                  <tr><td>Max. Schmelzpooltiefe</td><td>kein Grenzwert</td><td><input type="text" inputmode="decimal" data-grenz="poolW"></td><td>mm</td></tr>
+                  <tr><td>Min. Wachs-Reststand am Brennende</td><td>kein Grenzwert</td><td><input type="text" inputmode="decimal" data-grenz="restW"></td><td>mm</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="card-sub" style="margin:12px 0 0;">Bei Teelichtern gilt automatisch eine maximale Flammenhöhe von 30 mm (Kerzentyp im Test wählen).</p>
+            <button class="btn-secondary" id="btResetGrenz" style="margin-top:12px;">Standardwerte wiederherstellen</button>
+          </details>
+        </div>
+
+        <div class="card bt-section">
+          <details class="bt-info">
+            <summary>So führst du einen Brenntest durch</summary>
+            <h4>Testaufbau</h4>
+            <ul>
+              <li>Zugfreier Raum, normale Zimmertemperatur, nicht brennbare Unterlage, genügend Abstand zwischen den Kerzen.</li>
+              <li>Pro Rezeptur drei Kerzen parallel testen, damit Ausreisser sichtbar werden.</li>
+              <li>Zyklen von 4 Stunden brennen, danach mindestens 1 Stunde abkühlen lassen. Wiederholen bis zum Brennende.</li>
+              <li>Docht vor jedem Zyklus so kürzen, wie es auf deinem Warnhinweis steht.</li>
+              <li>Kerzen während des Tests nie unbeaufsichtigt lassen.</li>
+            </ul>
+            <h4>Messen</h4>
+            <ul>
+              <li>Etwa stündlich: Flammenhöhe (Lineal hinter der Flamme), Schmelzpool, Gefässtemperatur an der Seitenwand (Infrarotthermometer), Gewicht inkl. Gefäss.</li>
+              <li>Brenndauer immer kumuliert eintragen, also die Gesamtstunden seit Teststart.</li>
+              <li>Nachglimmzeit: beim Löschen Stoppuhr starten und stoppen, sobald der Docht weder glimmt noch raucht. Nur in der Messung eintragen, in der du löschst.</li>
+            </ul>
+            <h4>Was ist eine Zweitentzündung?</h4>
+            <p>Eine zweite Flamme neben der Dochtflamme, zum Beispiel an Deko-Elementen wie getrockneten Blüten oder Holzspänen, an einem Streichholzrest oder einem abgefallenen Russkopf im Wachs. Sie darf höchstens 10 Sekunden brennen. Tritt keine auf, bleibt das Feld leer.</p>
+            <h4>Am Ende prüfen</h4>
+            <ul>
+              <li>Standfestigkeit: Kerze auf eine um 10° geneigte Platte stellen und in mehrere Richtungen drehen. Sie darf nicht umkippen.</li>
+              <li>Das Gefäss darf während des ganzen Tests nicht reissen oder brechen.</li>
+              <li>Die Kerze darf sich nach dem Löschen nicht selbst wieder entzünden.</li>
+              <li>Russ lässt sich nur optisch beurteilen. Ein Russindex nach EN 15426 ist nur im Prüflabor messbar.</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+
+      <!-- Editor -->
+      <div id="btEditView" style="display:none;"></div>
+    </div><!-- /view-brenntest -->
+
   </main>
 </div>
 
@@ -1546,6 +1706,7 @@
 
   function goToView(target){
     views.forEach(v => v.classList.toggle('active', v.id === 'view-' + target));
+    if (target === 'brenntest' && window.btOpen) window.btOpen();
     if (target === 'mockup') { if (window.mkOpen) window.mkOpen(); }
     else if (window.mkPause) window.mkPause();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2118,6 +2279,565 @@
 
   renderVorrat();
 
+  // ---------- Brenntest-Protokolle ----------
+  const BT_GRENZ_DEFAULT = { flameN:75, flameW:50, glowN:30, glowW:20, secN:10, secW:0, tempW:70, poolW:15, restW:10 };
+  let brenntests = [];
+  let btGrenz = Object.assign({}, BT_GRENZ_DEFAULT);
+  let btCurrentId = null;
+
+  const btListView = document.getElementById('btListView');
+  const btEditView = document.getElementById('btEditView');
+  const btListEl = document.getElementById('btList');
+
+  function btEsc(s){
+    return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function btNum(v){
+    if (v === null || v === undefined) return null;
+    const s = String(v).trim().replace(',', '.');
+    if (s === '') return null;
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+  function btFmt(n, d){
+    if (n === null || n === undefined || !isFinite(n)) return '–';
+    return new Intl.NumberFormat('de-CH', { maximumFractionDigits: d ?? 1 }).format(n);
+  }
+  function btDateCH(iso){
+    if (!iso) return '';
+    const p = iso.split('-');
+    return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] : iso;
+  }
+  function btTodayISO(){
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function btNowTime(){
+    const d = new Date();
+    return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+  function btG(key){
+    const v = btNum(btGrenz[key]);
+    return v === null ? BT_GRENZ_DEFAULT[key] : v;
+  }
+  function btFlameNorm(t){ return t && t.kerzentyp === 'Teelicht' ? 30 : btG('flameN'); }
+
+  function btNextNr(){
+    const year = new Date().getFullYear();
+    let max = 0;
+    brenntests.forEach(t => {
+      const m = String(t.nr || '').match(/^BT-(\d{4})-(\d+)$/);
+      if (m && +m[1] === year) max = Math.max(max, +m[2]);
+    });
+    return 'BT-' + year + '-' + String(max + 1).padStart(3, '0');
+  }
+
+  // --- Berechnungen ---
+  function btMeasureEval(t, i){
+    const m = t.messungen[i];
+    const prev = i > 0 ? t.messungen[i-1] : null;
+    const prevW = prev ? btNum(prev.gewicht) : btNum(t.startGewicht);
+    const w = btNum(m.gewicht);
+    const abbrand = (prevW !== null && w !== null) ? prevW - w : null;
+    const prevD = prev ? btNum(prev.dauer) : 0;
+    const d = btNum(m.dauer);
+    const rate = (abbrand !== null && d !== null && prevD !== null && d - prevD > 0) ? abbrand / (d - prevD) : null;
+
+    const fl = btNum(m.flamme), sec = btNum(m.zweit), gl = btNum(m.glimmen), tp = btNum(m.temp), pt = btNum(m.poolT);
+    const field = {};
+    const flN = btFlameNorm(t);
+    if (fl !== null) field.flamme = fl > flN ? 'norm' : (fl > btG('flameW') ? 'warn' : '');
+    if (sec !== null) field.zweit = sec > btG('secN') ? 'norm' : (sec > btG('secW') ? 'warn' : '');
+    if (gl !== null) field.glimmen = gl > btG('glowN') ? 'norm' : (gl > btG('glowW') ? 'warn' : '');
+    if (tp !== null) field.temp = tp > btG('tempW') ? 'warn' : '';
+    if (pt !== null) field.poolT = pt > btG('poolW') ? 'warn' : '';
+    if (m.russ === 'stark') field.russ = 'warn';
+    if (m.flammenbild === 'unruhig/tanzend') field.flammenbild = 'warn';
+
+    const vals = Object.values(field);
+    const hasData = d !== null || w !== null || fl !== null;
+    let status = '';
+    if (hasData) {
+      if (field.flamme === 'norm' || field.zweit === 'norm') status = 'norm';
+      else if (vals.some(v => v)) status = 'warn';
+      else status = 'ok';
+    }
+    return { abbrand, rate, field, status };
+  }
+
+  function btSummary(t){
+    const ev = t.messungen.map((_, i) => btMeasureEval(t, i));
+    const nums = key => t.messungen.map(m => btNum(m[key])).filter(v => v !== null);
+    const max = arr => arr.length ? Math.max(...arr) : null;
+    const dauer = max(nums('dauer'));
+    const abbr = ev.map(e => e.abbrand).filter(v => v !== null);
+    const abbrand = abbr.length ? abbr.reduce((a, b) => a + b, 0) : null;
+    const rate = (abbrand !== null && dauer) ? abbrand / dauer : null;
+    const start = btNum(t.startGewicht), leer = btNum(t.leerGewicht);
+    const wachs = (start !== null && leer !== null) ? start - leer : null;
+    const hoch = (wachs !== null && rate) ? wachs / rate : null;
+    const glows = nums('glimmen');
+    const avgGlow = glows.length ? glows.reduce((a, b) => a + b, 0) / glows.length : null;
+    const s = {
+      dauer, abbrand, rate, wachs, hoch,
+      maxFlame: max(nums('flamme')), maxTemp: max(nums('temp')),
+      avgGlow, maxSec: max(nums('zweit')),
+      countNorm: ev.filter(e => e.status === 'norm').length,
+      countWarn: ev.filter(e => e.status === 'warn').length,
+      ev
+    };
+    // Normbeurteilung
+    const a = t.abschluss || {};
+    const reasons = [], missing = [];
+    if (s.maxFlame !== null && s.maxFlame > btFlameNorm(t)) reasons.push('Flammenhöhe über ' + btFlameNorm(t) + ' mm');
+    if (s.maxSec !== null && s.maxSec > btG('secN')) reasons.push('Zweitentzündung länger als ' + btG('secN') + ' s');
+    if (avgGlow !== null && avgGlow > btG('glowN')) reasons.push('Nachglimmzeit im Durchschnitt über ' + btG('glowN') + ' s');
+    if (a.stabil === 'nein') reasons.push('Standfestigkeit auf 10°-Schräge nicht bestanden');
+    if (a.gefaess === 'nein') reasons.push('Gefäss gerissen oder gebrochen');
+    if (a.selbst === 'ja') reasons.push('Kerze hat sich nach dem Löschen selbst wieder entzündet');
+    if (!t.messungen.length) missing.push('Messungen');
+    else if (s.maxFlame === null) missing.push('Flammenhöhe');
+    if (avgGlow === null) missing.push('Nachglimmzeit');
+    if (!a.stabil) missing.push('Standfestigkeit');
+    if (!a.gefaess) missing.push('Gefässprüfung');
+    if (!a.selbst) missing.push('Selbstwiederentzündung');
+    s.normReasons = reasons;
+    s.normMissing = missing;
+    s.norm = reasons.length ? 'bad' : (missing.length ? 'open' : 'ok');
+    return s;
+  }
+
+  // --- Liste ---
+  function btRenderList(){
+    btListView.style.display = '';
+    btEditView.style.display = 'none';
+    btEditView.innerHTML = '';
+    btCurrentId = null;
+
+    document.querySelectorAll('[data-grenz]').forEach(inp => { inp.value = btGrenz[inp.dataset.grenz] ?? ''; });
+
+    if (!brenntests.length) {
+      btListEl.innerHTML = '<div class="duft-card empty-state">Noch keine Brenntests. Lege mit «Neuer Test» das erste Protokoll an.</div>';
+      return;
+    }
+    const sorted = brenntests.slice().sort((a, b) => String(b.datum || '').localeCompare(String(a.datum || '')) || String(b.nr).localeCompare(String(a.nr)));
+    btListEl.innerHTML = sorted.map(t => {
+      const s = btSummary(t);
+      const g = (t.abschluss || {}).gesamt || '';
+      const gCls = g === 'bestanden' ? 'ok' : g === 'nicht bestanden' ? 'bad' : g ? 'warn' : '';
+      const nCls = s.norm === 'ok' ? 'ok' : s.norm === 'bad' ? 'bad' : '';
+      const nTxt = s.norm === 'ok' ? 'Norm erfüllt' : s.norm === 'bad' ? 'Norm nicht erfüllt' : 'Norm offen';
+      const meta = [t.duft, t.charge ? 'Charge ' + t.charge : '', btDateCH(t.datum)].filter(Boolean).map(btEsc).join('<br>');
+      return `<div class="duft-card bt-card" tabindex="0" data-bt-open="${btEsc(t.id)}" style="--duft-color:${s.norm === 'bad' ? 'var(--warn)' : s.norm === 'ok' ? 'var(--coco)' : 'var(--soy)'}">
+        <div>
+          <div class="bt-card-nr">${btEsc(t.nr)}</div>
+          <div class="duft-name">${btEsc(t.produkt || 'Ohne Produktname')}</div>
+          <div class="bt-card-meta">${meta || '&nbsp;'}</div>
+        </div>
+        <div class="duft-meta">
+          <span class="bt-pill ${nCls}">${nTxt}</span>
+          ${g ? `<span class="bt-pill ${gCls}">${btEsc(g)}</span>` : `<span>${t.messungen.length} Messungen</span>`}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  btListEl.addEventListener('click', e => {
+    const c = e.target.closest('[data-bt-open]');
+    if (c) btOpenEditor(c.dataset.btOpen);
+  });
+  btListEl.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const c = e.target.closest('[data-bt-open]');
+    if (c) btOpenEditor(c.dataset.btOpen);
+  });
+
+  document.getElementById('btNewBtn').addEventListener('click', () => {
+    const t = {
+      id: 'bt' + Date.now(),
+      nr: btNextNr(), datum: btTodayISO(), pruefer: '', produkt: '', duft: '', charge: '',
+      kerzentyp: 'Containerkerze', gefaess: '', gefaessD: '', wachs: '', duftPct: '', docht: '', dochtAnzahl: '1',
+      startGewicht: '', leerGewicht: '', raumTemp: '', zugluftfrei: '', unterlage: '',
+      messungen: [], abschluss: {}
+    };
+    brenntests.push(t);
+    scheduleAutoSave();
+    btOpenEditor(t.id);
+  });
+
+  document.querySelectorAll('[data-grenz]').forEach(inp => {
+    inp.addEventListener('input', () => { btGrenz[inp.dataset.grenz] = inp.value; scheduleAutoSave(); });
+  });
+  document.getElementById('btResetGrenz').addEventListener('click', () => {
+    if (!confirm('Alle Grenzwerte auf die Standardwerte zurücksetzen?')) return;
+    btGrenz = Object.assign({}, BT_GRENZ_DEFAULT);
+    btRenderList();
+    scheduleAutoSave();
+  });
+
+  // --- Editor ---
+  function btInput(path, label, value, opts){
+    opts = opts || {};
+    const id = 'bt_' + path.replace(/[^a-z0-9]/gi, '_');
+    let ctrl;
+    if (opts.options) {
+      ctrl = `<select id="${id}" data-bt="${path}"><option value=""></option>${opts.options.map(o => `<option${o === value ? ' selected' : ''}>${btEsc(o)}</option>`).join('')}</select>`;
+    } else if (opts.textarea) {
+      ctrl = `<textarea id="${id}" data-bt="${path}">${btEsc(value)}</textarea>`;
+    } else {
+      const type = opts.type || 'text';
+      const extra = opts.num ? ' inputmode="decimal"' : '';
+      const list = opts.list ? ` list="${opts.list}"` : '';
+      ctrl = `<input id="${id}" type="${type}" data-bt="${path}" value="${btEsc(value)}"${extra}${list}${opts.readonly ? ' readonly tabindex="-1"' : ''}>`;
+    }
+    return `<div class="bt-field"${opts.wide ? ' style="grid-column:1/-1"' : ''}><label for="${id}">${label}</label>${ctrl}</div>`;
+  }
+
+  function btMeasureHTML(t, i){
+    const m = t.messungen[i];
+    const p = 'm.' + i + '.';
+    return `<div class="bt-measure" data-bt-measure="${i}">
+      <div class="bt-measure-head">
+        <div class="bt-measure-title">Messung ${i + 1}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="bt-pill" data-bt-mstatus="${i}"></span>
+          <button class="bt-icon-btn no-print" data-bt-del="${i}" aria-label="Messung ${i + 1} löschen" title="Messung löschen">×</button>
+        </div>
+      </div>
+      <div class="bt-fields">
+        ${btInput(p + 'zyklus', 'Zyklus', m.zyklus, { num: true })}
+        ${btInput(p + 'datum', 'Datum', m.datum, { type: 'date' })}
+        ${btInput(p + 'zeit', 'Uhrzeit', m.zeit, { type: 'time' })}
+        ${btInput(p + 'dauer', 'Brenndauer kumuliert (h)', m.dauer, { num: true })}
+        ${btInput(p + 'gewicht', 'Gewicht gesamt (g)', m.gewicht, { num: true })}
+        ${btInput(p + 'flamme', 'Flammenhöhe (mm)', m.flamme, { num: true })}
+        ${btInput(p + 'poolD', 'Pool Ø (mm)', m.poolD, { num: true })}
+        ${btInput(p + 'poolT', 'Pooltiefe (mm)', m.poolT, { num: true })}
+        ${btInput(p + 'temp', 'Gefässtemperatur (°C)', m.temp, { num: true })}
+        ${btInput(p + 'russ', 'Russ', m.russ, { options: ['keine', 'leicht', 'stark'] })}
+        ${btInput(p + 'flammenbild', 'Flammenbild', m.flammenbild, { options: ['ruhig', 'leicht flackernd', 'unruhig/tanzend'] })}
+        ${btInput(p + 'zweit', 'Zweitentzündung (s)', m.zweit, { num: true })}
+        ${btInput(p + 'glimmen', 'Nachglimmen beim Löschen (s)', m.glimmen, { num: true })}
+        ${btInput(p + 'bem', 'Bemerkung', m.bem, { wide: true })}
+      </div>
+      <div class="bt-measure-calc" data-bt-mcalc="${i}"></div>
+    </div>`;
+  }
+
+  function btOpenEditor(id){
+    const t = brenntests.find(x => x.id === id);
+    if (!t) return btRenderList();
+    btCurrentId = id;
+    t.abschluss = t.abschluss || {};
+    const a = t.abschluss;
+    const duftNames = (typeof duefte !== 'undefined' && Array.isArray(duefte)) ? duefte.map(d => d.name).filter(Boolean) : [];
+
+    btEditView.innerHTML = `
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">Brenntest ${btEsc(t.nr)}</div>
+          <h1 id="btEditTitle">${btEsc(t.produkt || 'Neuer Brenntest')}</h1>
+        </div>
+        <div class="bt-head-actions no-print">
+          <button class="btn-secondary" id="btBackToList">Alle Tests</button>
+          <button class="btn-secondary" id="btPrintBtn">Drucken / PDF</button>
+        </div>
+      </div>
+      <datalist id="btDuftList">${duftNames.map(n => `<option value="${btEsc(n)}">`).join('')}</datalist>
+
+      <div class="card bt-section">
+        <div class="card-title">Kerze & Testaufbau</div>
+        <p class="card-sub">Was getestet wird und unter welchen Bedingungen.</p>
+        <div class="bt-fields">
+          ${btInput('nr', 'Protokoll-Nr.', t.nr)}
+          ${btInput('datum', 'Prüfdatum', t.datum, { type: 'date' })}
+          ${btInput('pruefer', 'Prüfer/in', t.pruefer)}
+          ${btInput('produkt', 'Produktname', t.produkt)}
+          ${btInput('duft', 'Duft', t.duft, { list: 'btDuftList' })}
+          ${btInput('charge', 'Chargennummer', t.charge)}
+          ${btInput('kerzentyp', 'Kerzentyp', t.kerzentyp, { options: ['Containerkerze', 'Stumpenkerze', 'Teelicht', 'Andere'] })}
+          ${btInput('gefaess', 'Gefäss (Material/Typ)', t.gefaess)}
+          ${btInput('gefaessD', 'Gefäss Ø innen (mm)', t.gefaessD, { num: true })}
+          ${btInput('wachs', 'Wachsart', t.wachs)}
+          ${btInput('duftPct', 'Duftöl-Anteil (%)', t.duftPct, { num: true })}
+          ${btInput('docht', 'Dochttyp / -grösse', t.docht)}
+          ${btInput('dochtAnzahl', 'Anzahl Dochte', t.dochtAnzahl, { num: true })}
+          ${btInput('startGewicht', 'Startgewicht gesamt (g)', t.startGewicht, { num: true })}
+          ${btInput('leerGewicht', 'Gewicht leeres Gefäss (g)', t.leerGewicht, { num: true })}
+          <div class="bt-field"><label>Wachs netto (g)</label><input type="text" id="btWachsNetto" readonly tabindex="-1"></div>
+          ${btInput('raumTemp', 'Raumtemperatur (°C)', t.raumTemp, { num: true })}
+          ${btInput('zugluftfrei', 'Zugluftfrei', t.zugluftfrei, { options: ['ja', 'nein'] })}
+          ${btInput('unterlage', 'Unterlage nicht brennbar', t.unterlage, { options: ['ja', 'nein'] })}
+        </div>
+      </div>
+
+      <div class="card bt-section">
+        <div class="card-title">Messungen</div>
+        <p class="card-sub">Etwa stündlich messen. Brenndauer kumuliert, Gewicht inklusive Gefäss.</p>
+        <div id="btMeasures">${t.messungen.map((_, i) => btMeasureHTML(t, i)).join('')}</div>
+        <button class="add-btn no-print" id="btAddMeasure"><span class="plus">+</span> Messung hinzufügen</button>
+        <div class="bt-legend"><span class="l-norm">Normgrenzwert überschritten</span><span class="l-warn">Warnschwelle überschritten</span></div>
+      </div>
+
+      <div class="card bt-section">
+        <div class="card-title">Auswertung</div>
+        <p class="card-sub">Wird automatisch aus den Messungen berechnet.</p>
+        <div id="btVerdict" class="bt-verdict"></div>
+        <div class="bt-stats" id="btStats"></div>
+      </div>
+
+      <div class="card bt-section">
+        <div class="card-title">Abschluss</div>
+        <p class="card-sub">Nach dem Brennende ausfüllen.</p>
+        <div class="bt-fields">
+          ${btInput('a.poolRand', 'Schmelzpool erreicht Rand im 1. Zyklus', a.poolRand, { options: ['ja', 'nein'] })}
+          ${btInput('a.rest', 'Wachs-Reststand am Brennende (mm)', a.rest, { num: true })}
+          ${btInput('a.stabil', 'Standfestigkeit 10°-Schräge bestanden (Norm)', a.stabil, { options: ['ja', 'nein'] })}
+          ${btInput('a.gefaess', 'Gefäss intakt, keine Risse (Norm)', a.gefaess, { options: ['ja', 'nein'] })}
+          ${btInput('a.selbst', 'Nach Löschen selbst wieder entzündet (Norm)', a.selbst, { options: ['ja', 'nein'] })}
+          ${btInput('a.docht', 'Docht umgefallen / ertrunken', a.docht, { options: ['ja', 'nein'] })}
+          ${btInput('a.gesamt', 'Gesamtbeurteilung', a.gesamt, { options: ['bestanden', 'nicht bestanden', 'anpassen & wiederholen'] })}
+          ${btInput('a.unterschrift', 'Datum / Unterschrift', a.unterschrift)}
+          ${btInput('a.massnahmen', 'Massnahmen / Bemerkungen', a.massnahmen, { textarea: true, wide: true })}
+        </div>
+      </div>
+
+      <div class="bt-actions no-print">
+        <button class="btn-danger" id="btDeleteBtn">Test löschen</button>
+        <div class="bt-actions-right">
+          <button class="btn-secondary" id="btDuplicateBtn">Als Vorlage kopieren</button>
+          <button class="btn-primary" id="btDoneBtn">Fertig</button>
+        </div>
+      </div>
+    `;
+    btListView.style.display = 'none';
+    btEditView.style.display = '';
+    btUpdateDerived();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function btCurrent(){ return brenntests.find(x => x.id === btCurrentId); }
+
+  function btSetPath(t, path, value){
+    const parts = path.split('.');
+    if (parts[0] === 'm') { t.messungen[+parts[1]][parts[2]] = value; }
+    else if (parts[0] === 'a') { t.abschluss[parts[1]] = value; }
+    else { t[path] = value; }
+  }
+
+  function btUpdateDerived(){
+    const t = btCurrent();
+    if (!t) return;
+    const s = btSummary(t);
+    const net = document.getElementById('btWachsNetto');
+    if (net) net.value = s.wachs !== null ? btFmt(s.wachs, 0) : '';
+    const title = document.getElementById('btEditTitle');
+    if (title) title.textContent = t.produkt || 'Neuer Brenntest';
+
+    s.ev.forEach((e, i) => {
+      const box = btEditView.querySelector(`[data-bt-measure="${i}"]`);
+      if (!box) return;
+      box.classList.remove('s-ok', 's-warn', 's-norm');
+      if (e.status) box.classList.add('s-' + e.status);
+      ['flamme', 'zweit', 'glimmen', 'temp', 'poolT', 'russ', 'flammenbild'].forEach(k => {
+        const el = box.querySelector(`[data-bt="m.${i}.${k}"]`);
+        if (!el) return;
+        el.classList.toggle('lim-norm', e.field[k] === 'norm');
+        el.classList.toggle('lim-warn', e.field[k] === 'warn');
+      });
+      const pill = box.querySelector(`[data-bt-mstatus="${i}"]`);
+      pill.className = 'bt-pill ' + (e.status === 'ok' ? 'ok' : e.status === 'warn' ? 'warn' : e.status === 'norm' ? 'bad' : '');
+      pill.textContent = e.status === 'ok' ? 'OK' : e.status === 'warn' ? 'Prüfen' : e.status === 'norm' ? 'Normverstoss' : '';
+      pill.style.display = e.status ? '' : 'none';
+      const calc = box.querySelector(`[data-bt-mcalc="${i}"]`);
+      calc.textContent = (e.abbrand !== null || e.rate !== null)
+        ? 'Abbrand seit letzter Messung: ' + btFmt(e.abbrand, 0) + ' g   |   Abbrandrate: ' + btFmt(e.rate, 1) + ' g/h'
+        : '';
+    });
+
+    // Abschluss-Felder markieren
+    const a = t.abschluss || {};
+    const mark = (key, bad) => {
+      const el = btEditView.querySelector(`[data-bt="a.${key}"]`);
+      if (el) el.classList.toggle('lim-norm', !!a[key] && a[key] === bad);
+    };
+    mark('stabil', 'nein'); mark('gefaess', 'nein'); mark('selbst', 'ja');
+    const restEl = btEditView.querySelector('[data-bt="a.rest"]');
+    if (restEl) { const r = btNum(a.rest); restEl.classList.toggle('lim-warn', r !== null && r < btG('restW')); }
+    const docEl = btEditView.querySelector('[data-bt="a.docht"]');
+    if (docEl) docEl.classList.toggle('lim-warn', a.docht === 'ja');
+    const poolEl = btEditView.querySelector('[data-bt="a.poolRand"]');
+    if (poolEl) poolEl.classList.toggle('lim-warn', a.poolRand === 'nein');
+
+    // Urteil
+    const v = document.getElementById('btVerdict');
+    if (s.norm === 'bad') {
+      v.className = 'bt-verdict bad';
+      v.innerHTML = '<strong>Normanforderung nicht erfüllt</strong>' + s.normReasons.map(btEsc).join('<br>');
+    } else if (s.norm === 'ok') {
+      v.className = 'bt-verdict ok';
+      v.innerHTML = '<strong>Alle geprüften Normanforderungen erfüllt</strong>Gemäss EN 15493:2019' + (s.countWarn ? '. ' + s.countWarn + ' Messung(en) über deinen Warnschwellen – bitte prüfen.' : '.');
+    } else {
+      v.className = 'bt-verdict';
+      v.innerHTML = '<strong>Noch nicht vollständig</strong>Es fehlen: ' + s.normMissing.map(btEsc).join(', ') + '.';
+    }
+
+    const flN = btFlameNorm(t);
+    const stat = (label, val, opts) => {
+      opts = opts || {};
+      return `<div class="bt-stat ${opts.cls || ''}"><div class="bt-stat-label">${label}</div><div class="bt-stat-value">${val}</div>${opts.note ? `<div class="bt-stat-norm">${opts.note}</div>` : ''}</div>`;
+    };
+    const lim = (val, n, w) => val === null ? '' : (n !== null && val > n ? 'norm' : (w !== null && val > w ? 'warn' : ''));
+    document.getElementById('btStats').innerHTML = [
+      stat('Gesamtbrenndauer', btFmt(s.dauer, 1) + ' h'),
+      stat('Abbrand gesamt', btFmt(s.abbrand, 0) + ' g'),
+      stat('Ø Abbrandrate', btFmt(s.rate, 1) + ' g/h'),
+      stat('Hochgerechnete Brenndauer', btFmt(s.hoch, 0) + ' h', { note: 'aus Wachs netto und Ø Abbrandrate' }),
+      stat('Max. Flammenhöhe', btFmt(s.maxFlame, 0) + ' mm', { cls: lim(s.maxFlame, flN, btG('flameW')), note: 'Norm max. ' + flN + ' mm' }),
+      stat('Max. Gefässtemperatur', btFmt(s.maxTemp, 0) + ' °C', { cls: lim(s.maxTemp, null, btG('tempW')), note: 'Warnschwelle ' + btG('tempW') + ' °C' }),
+      stat('Ø Nachglimmzeit', btFmt(s.avgGlow, 1) + ' s', { cls: lim(s.avgGlow, btG('glowN'), btG('glowW')), note: 'Norm max. ' + btG('glowN') + ' s' }),
+      stat('Max. Zweitentzündung', s.maxSec === null ? 'keine' : btFmt(s.maxSec, 0) + ' s', { cls: lim(s.maxSec, btG('secN'), btG('secW')), note: 'Norm max. ' + btG('secN') + ' s' }),
+      stat('Messungen mit Normverstoss', String(s.countNorm), { cls: s.countNorm ? 'norm' : '' }),
+      stat('Messungen «Prüfen»', String(s.countWarn), { cls: s.countWarn ? 'warn' : '' })
+    ].join('');
+  }
+
+  btEditView.addEventListener('input', e => {
+    const path = e.target.dataset && e.target.dataset.bt;
+    const t = btCurrent();
+    if (!path || !t) return;
+    btSetPath(t, path, e.target.value);
+    btUpdateDerived();
+    scheduleAutoSave();
+  });
+  btEditView.addEventListener('change', e => {
+    if (e.target.tagName === 'SELECT' || e.target.type === 'date' || e.target.type === 'time') {
+      const path = e.target.dataset && e.target.dataset.bt;
+      const t = btCurrent();
+      if (!path || !t) return;
+      btSetPath(t, path, e.target.value);
+      btUpdateDerived();
+      scheduleAutoSave();
+    }
+  });
+
+  btEditView.addEventListener('click', e => {
+    const t = btCurrent();
+    if (!t) return;
+    const del = e.target.closest('[data-bt-del]');
+    if (del) {
+      const i = +del.dataset.btDel;
+      if (!confirm('Messung ' + (i + 1) + ' löschen?')) return;
+      t.messungen.splice(i, 1);
+      document.getElementById('btMeasures').innerHTML = t.messungen.map((_, k) => btMeasureHTML(t, k)).join('');
+      btUpdateDerived();
+      scheduleAutoSave();
+      return;
+    }
+    const id = e.target.closest('button') && e.target.closest('button').id;
+    if (id === 'btAddMeasure') {
+      const last = t.messungen[t.messungen.length - 1];
+      const lastD = last ? btNum(last.dauer) : null;
+      t.messungen.push({
+        zyklus: last ? last.zyklus : '1',
+        datum: btTodayISO(), zeit: btNowTime(),
+        dauer: lastD !== null ? String(lastD + 1) : '1',
+        gewicht: '', flamme: '', poolD: '', poolT: '', temp: '', russ: '', flammenbild: '', zweit: '', glimmen: '', bem: ''
+      });
+      const wrap = document.getElementById('btMeasures');
+      wrap.insertAdjacentHTML('beforeend', btMeasureHTML(t, t.messungen.length - 1));
+      btUpdateDerived();
+      scheduleAutoSave();
+      const fld = wrap.lastElementChild.querySelector('[data-bt$=".gewicht"]');
+      if (fld) fld.focus({ preventScroll: true });
+      wrap.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (id === 'btBackToList' || id === 'btDoneBtn') {
+      btRenderList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (id === 'btPrintBtn') {
+      window.print();
+    } else if (id === 'btDeleteBtn') {
+      if (!confirm('Brenntest ' + t.nr + ' endgültig löschen?')) return;
+      brenntests = brenntests.filter(x => x.id !== t.id);
+      scheduleAutoSave();
+      btRenderList();
+    } else if (id === 'btDuplicateBtn') {
+      const copy = JSON.parse(JSON.stringify(t));
+      copy.id = 'bt' + Date.now();
+      copy.nr = btNextNr();
+      copy.datum = btTodayISO();
+      copy.charge = '';
+      copy.startGewicht = '';
+      copy.messungen = [];
+      copy.abschluss = {};
+      brenntests.push(copy);
+      scheduleAutoSave();
+      btOpenEditor(copy.id);
+    }
+  });
+
+  window.btOpen = function(){ btRenderList(); };
+  btRenderList();
+
+  // --- Muster-Protokoll (wird einmalig hinterlegt) ---
+  const BT_MUSTER_FLAG = 'kerzenwerkstatt-bt-muster';
+  function btBuildMuster(){
+    const rows = [
+      // [zyklus, datum, zeit, dauer, gewicht, flamme, poolD, poolT, temp, russ, flammenbild, glimmen, bemerkung]
+      [1,'2026-09-24','09:00',1,325,32,52,4,38,'keine','ruhig','','Docht vor Start auf 5 mm gekürzt'],
+      [1,'2026-09-24','10:00',2,320,35,64,7,44,'keine','ruhig','',''],
+      [1,'2026-09-24','11:00',3,315,36,70,9,48,'keine','ruhig','','Pool erreicht Gefässrand'],
+      [1,'2026-09-24','12:00',4,310,36,70,10,50,'keine','ruhig',9,'Gelöscht, abkühlen lassen'],
+      [2,'2026-09-25','09:00',5,305,30,60,5,40,'keine','ruhig','','Docht auf 5 mm gekürzt'],
+      [2,'2026-09-25','10:00',6,300,34,70,8,46,'keine','ruhig','',''],
+      [2,'2026-09-25','11:00',7,295,36,70,10,50,'keine','ruhig','',''],
+      [2,'2026-09-25','12:00',8,290,37,70,11,52,'keine','ruhig',11,'Gelöscht, abkühlen lassen'],
+      [3,'2026-09-26','09:00',9,285,31,62,5,42,'keine','ruhig','','Docht auf 5 mm gekürzt'],
+      [3,'2026-09-26','10:00',10,280,35,70,8,48,'keine','ruhig','',''],
+      [3,'2026-09-26','11:00',11,275,38,70,10,53,'keine','ruhig','',''],
+      [3,'2026-09-26','12:00',12,270,38,70,12,55,'keine','ruhig',10,'Gelöscht, abkühlen lassen'],
+      [4,'2026-09-27','09:00',13,265,32,64,6,45,'keine','ruhig','','Docht auf 5 mm gekürzt'],
+      [4,'2026-09-27','10:00',14,260,36,70,9,52,'keine','ruhig','',''],
+      [4,'2026-09-27','11:00',15,255,40,70,11,57,'leicht','leicht flackernd','','Leichter Russ am Glasrand'],
+      [4,'2026-09-27','12:00',16,250,40,70,12,58,'keine','ruhig',12,'Gelöscht, abkühlen lassen'],
+      [5,'2026-09-28','09:00',17,245,33,65,6,48,'keine','ruhig','','Docht auf 5 mm gekürzt'],
+      [5,'2026-09-28','10:00',18,240,38,70,9,56,'keine','ruhig','',''],
+      [5,'2026-09-28','11:00',19,235,42,70,11,61,'keine','ruhig','',''],
+      [5,'2026-09-28','12:00',20,230,42,70,12,63,'keine','ruhig',13,'Gelöscht, abkühlen lassen'],
+      [6,'2026-09-29','09:00',21,225,35,66,6,52,'keine','ruhig','','Docht auf 5 mm gekürzt'],
+      [6,'2026-09-29','10:00',22,220,40,70,9,60,'keine','ruhig','',''],
+      [6,'2026-09-29','11:00',23,216,44,70,10,65,'keine','ruhig','','Wenig Wachs übrig, engmaschig beobachten'],
+      [6,'2026-09-29','11:30',23.5,214,30,70,6,66,'keine','ruhig',15,'Kerze von selbst erloschen, Reststand 12 mm']
+    ];
+    return {
+      id: 'bt-muster',
+      nr: 'BT-MUSTER', datum: '2026-09-24', pruefer: 'Florian',
+      produkt: 'Duftkerze 150 g', duft: 'Muster', charge: '2609-M',
+      kerzentyp: 'Containerkerze', gefaess: 'Glas, klar, mit Deckel', gefaessD: '70',
+      wachs: 'Soja/Kokos 60/40', duftPct: '8', docht: 'Baumwolle, Grösse 4', dochtAnzahl: '1',
+      startGewicht: '330', leerGewicht: '180', raumTemp: '21', zugluftfrei: 'ja', unterlage: 'ja',
+      messungen: rows.map(r => ({
+        zyklus: String(r[0]), datum: r[1], zeit: r[2], dauer: String(r[3]), gewicht: String(r[4]),
+        flamme: String(r[5]), poolD: String(r[6]), poolT: String(r[7]), temp: String(r[8]),
+        russ: r[9], flammenbild: r[10], zweit: '', glimmen: r[11] === '' ? '' : String(r[11]), bem: r[12]
+      })),
+      abschluss: {
+        poolRand: 'ja', rest: '12', stabil: 'ja', gefaess: 'ja', selbst: 'nein', docht: 'nein',
+        gesamt: 'bestanden', unterschrift: '29.09.2026, Florian',
+        massnahmen: 'Muster-Protokoll: So sieht ein vollständig dokumentierter Brenntest aus. 6 Zyklen à 4 Stunden bis zum Selbstverlöschen, alle Werte unter den Warnschwellen, keine Zweitentzündung. Leichter Russ in Zyklus 4 nach dem Kürzen nicht mehr aufgetreten. Rezeptur freigegeben.'
+      }
+    };
+  }
+  function btEnsureMuster(){
+    let done = false;
+    try { done = localStorage.getItem(BT_MUSTER_FLAG) === '1'; } catch (err) {}
+    if (done || brenntests.some(t => t.id === 'bt-muster')) return;
+    brenntests.push(btBuildMuster());
+    try { localStorage.setItem(BT_MUSTER_FLAG, '1'); } catch (err) {}
+    btRenderList();
+    scheduleAutoSave();
+  }
+
   // ---------- Daten exportieren / importieren ----------
   const exportDataBtn = document.getElementById('exportDataBtn');
   const importDataBtn = document.getElementById('importDataBtn');
@@ -2128,6 +2848,8 @@
       exportedAt: new Date().toISOString(),
       duefte: duefte,
       duftKategorien: duftKategorien,
+      brenntests: brenntests,
+      brenntestGrenzwerte: btGrenz,
       vorrat: {
         soy: { current: vSoyCurrent.value, max: vSoyMax.value, min: vSoyMin.value },
         coco: { current: vCocoCurrent.value, max: vCocoMax.value, min: vCocoMin.value },
@@ -2147,6 +2869,12 @@
     }
     if (Array.isArray(data.duftKategorien)) {
       duftKategorien = data.duftKategorien;
+    }
+    if (Array.isArray(data.brenntests)) {
+      brenntests = data.brenntests;
+    }
+    if (data.brenntestGrenzwerte && typeof data.brenntestGrenzwerte === 'object') {
+      btGrenz = Object.assign({}, BT_GRENZ_DEFAULT, data.brenntestGrenzwerte);
     }
     if (data.vorrat) {
       if (data.vorrat.soy) {
@@ -2178,6 +2906,7 @@
     renderKategorieListe();
     renderDuefte();
     renderVorrat();
+    btRenderList();
     update();
   }
 
@@ -2229,6 +2958,7 @@
   autoSaveIndicator = document.getElementById('autoSaveIndicator');
 
   loadAutoSaved();
+  btEnsureMuster();
 
   // Auto-Save bei allen relevanten Eingaben aktivieren
   [qty150Input, qty70Input, fragrancePctInput].forEach(el => el.addEventListener('input', scheduleAutoSave));
